@@ -1,0 +1,67 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Logo from "../components/Logo.astro";
+import TextInput from "../components/TextInput.astro";
+import Button from "../components/Button.astro";
+
+const apiURL = import.meta.env.API_URL;
+---
+
+<Layout>
+  <main>
+    <Logo />
+    <h1>Locker Registration</h1>
+    <form target={apiURL + "register"}>
+      <TextInput label="Name or Club" id="name" name="name" />
+      <TextInput label="Email" id="email" name="email" />
+      <TextInput
+        label="Locker Number"
+        id="locker-number"
+        name="locker-number"
+      />
+      <Button>Register</Button>
+    </form>
+    <div class="form-footer">
+      Already have an account?
+      <a href="./login">Log in.</a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :root {
+    --logo-size: 6rem;
+    --main-gap: 1.5rem;
+  }
+  main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--main-gap);
+
+    position: relative;
+    top: calc((var(--logo-size) + var(--main-gap)) / -3);
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    align-items: center;
+  }
+  .form-footer {
+    font-weight: 700;
+  }
+  .form-footer a {
+    text-decoration: underline;
+    color: var(--neutral-500);
+  }
+</style>

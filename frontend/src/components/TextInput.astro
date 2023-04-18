@@ -1,0 +1,43 @@
+---
+export interface Props {
+  id: string;
+  name: string;
+  label: string;
+}
+
+const { id, name, label } = Astro.props;
+---
+
+<div class="text-input">
+  <label for={id}>{label}</label>
+  <input type="text" id={id} name={name} required />
+</div>
+
+<style>
+  .text-input {
+    max-width: 22rem;
+    width: 100%;
+  }
+  label {
+    color: var(--neutral-600);
+    font-size: 1rem
+    font-weight: 500;
+  }
+  input {
+    display: block;
+    height: 2.5rem;
+    width: 100%;
+
+    padding: 0.125rem 0.5rem;
+    margin: auto;
+    margin-top: 0.25rem;
+    box-sizing: border-box;
+    align: center;
+
+    background-color: var(--neutral-50);
+    border: 1px solid var(--neutral-300);
+    border-radius: 5px;
+    color: var(--neutral-700);
+    font-size: 1rem;
+  }
+</style>
