@@ -6,55 +6,18 @@ import Button from "../components/Button.astro";
 ---
 
 <Layout>
-  <main>
+  <main
+    class="w-full flex flex-col items-center justify-center gap-[var(--main-gap)] relative top-[calc((var(--logo-size)+var(--main-gap))/-3)]"
+  >
     <Logo />
-    <h1>Locker Registration</h1>
-    <form>
+    <h1 class="text-2xl font-bold text-center">Locker Registration</h1>
+    <form method="post" class="flex flex-col items-center w-full gap-5">
       <TextInput label="Email" id="email" name="email" />
-      <Button>Register</Button>
+      <Button>Log in</Button>
     </form>
-    <div class="form-footer">
+    <div class="font-bold">
       Don't have a locker?
-      <a href="./">Register.</a>
+      <a href="./" class="underline text-neutral-500">Register.</a>
     </div>
   </main>
 </Layout>
-
-<style>
-  :root {
-    --logo-size: 6rem;
-    --main-gap: 1.5rem;
-  }
-  main {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--main-gap);
-
-    position: relative;
-    top: calc((var(--logo-size) + var(--main-gap)) / -3);
-  }
-  h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0;
-    text-align: center;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    width: 100%;
-    align-items: center;
-  }
-  .other-page {
-    font-weight: 700;
-  }
-
-  .other-page a {
-    text-decoration: underline;
-    color: var(--neutral-500);
-  }
-</style>

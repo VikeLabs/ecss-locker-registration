@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div id="flash" class="font-medium text-xl max-sm text-center"></div>
+</Layout>
+
+<script defer>
+  const flash = document.getElementById("flash");
+  const params = new URLSearchParams(window.location.search);
+  flashMessage = params.get("msg");
+
+  flash.textContent = flashMessage;
+</script>
+
+<style>
+    #flash {
+        font-weight: 500;
+        font-size: 1.25rem;
+    }
+</style>

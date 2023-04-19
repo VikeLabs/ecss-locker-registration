@@ -1,26 +1,5 @@
----
----
-
-<button>
+<button
+  class="flex items-center justify-center px-6 py-3 border-transparent rounded-lg bg-ess-orange text-neutral-50 font-bold text-sm hover:cursor-pointer"
+>
   <slot />
 </button>
-
-<style>
-  button {
-    display: flex;
-    align-items: center;
-    justify-items: center;
-    padding: 0.75rem 1.5rem;
-    /* padding: 0.5rem 1rem; */
-    border-color: transparent;
-    border-radius: 8px;
-    background-color: var(--ess-orange);
-    color: var(--neutral-50);
-    font-weight: 700;
-    font-size: 1rem;
-  }
-
-  button:hover {
-    cursor: pointer;
-  }
-</style>
