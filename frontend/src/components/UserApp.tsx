@@ -1,32 +1,79 @@
 import React from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import {
+  RouterProvider,
+  createHashRouter,
+} from "react-router-dom";
 import { Home } from "./user_app/Home";
-import Table from "./Table";
+import { Locker } from "./user_app/Locker";
+import type { LockerStatus } from "../types";
+import { Transfer } from "./user_app/Transfer";
+import { Deregister } from "./user_app/Deregister";
+
+const mockData: {
+  [key: string]: {
+    name: string;
+    status: LockerStatus;
+  };
+} = {
+  "120": {
+    name: "Malcolm Seyd",
+    status: "expired",
+  },
+  "144": {
+    name: "VikeSec",
+    status: "claimed",
+  },
+};
+
+const router = createHashRouter([
+  {
+    path: "/",
+    element: <Home />,
+    loader: () => {
+      return {
+        lockers: Object.entries(mockData).map(([id, obj]) => ({
+          locker: id,
+          ...obj,
+        })),
+      };
+    },
+  },
+  {
+    path: ":id",
+    element: <Locker />,
+    loader: ({ params }) => {
+      if (params.id === undefined) {
+        throw Error("no such locker");
+      }
+      return mockData[params.id as any];
+    },
+  },
+  {
+    path: ":id/transfer",
+    element: <Transfer />,
+    loader: ({ params }) => {
+      if (params.id === undefined) {
+        throw Error("no such locker");
+      }
+      return { locker: params.id };
+    },
+  },
+  {
+    path: ":id/deregister",
+    element: <Deregister />,
+    loader: ({ params }) => {
+      if (params.id === undefined) {
+        throw Error("no such locker");
+      }
+      return { locker: params.id };
+    },
+  },
+]);
 
 export default function UserApp() {
   return (
     <React.StrictMode>
-      <HashRouter>
-        <Routes>
-          <Route
-            index
-            element={
-              <Home
-                lockers={[
-                  { name: "Malcolm Seyd", locker: "120" },
-                  { name: "VikeSec", locker: "144" },
-                ]}
-              />
-            }
-          />
-          {/* <Route path="/:id" element={<MockLocker />} /> */}
-        </Routes>
-      </HashRouter>
+      <RouterProvider router={router}></RouterProvider>
     </React.StrictMode>
   );
 }
-
-// function MockLocker() {
-//   return (
-//   );
-// }

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import chevron from "./chevron_right.svg";
 
 type RowProps = {
@@ -7,12 +8,16 @@ type RowProps = {
 };
 
 function Row({ name, locker }: RowProps) {
+  let navigate = useNavigate();
   return (
-    <tr className="text-lg font-medium hover:bg-neutral-100 [&_td]:border-b [&_td]:border-neutral-300 [&_td]:last:border-b-0 ">
-      <td className="p-1 pl-2 m0">{name}</td>
-      <td>{locker}</td>
-      <td>
-        <img className="w-7 h-7" src={chevron}></img>
+    <tr
+      onClick={() => navigate(`/${locker}`)}
+      className="text-lg hover:bg-neutral-200 hover:cursor-pointer [&_td]:border-b [&_td]:border-neutral-300 [&_td]:last:border-b-0"
+    >
+      <td className="p-3 pl-4">{name}</td>
+      <td className="p-3">{locker}</td>
+      <td className="p-3 pr-4">
+        <img className="w-7 h-7 ml-auto mr-0" src={chevron}></img>
       </td>
     </tr>
   );
