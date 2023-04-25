@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  RouterProvider,
-  createHashRouter,
-} from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import { Home } from "./user_app/Home";
 import { Locker } from "./user_app/Locker";
 import type { LockerStatus } from "../types";
@@ -45,7 +42,7 @@ const router = createHashRouter([
       if (params.id === undefined) {
         throw Error("no such locker");
       }
-      return mockData[params.id as any];
+      return { ...mockData[params.id as any], locker: params.id };
     },
   },
   {
