@@ -1,5 +1,5 @@
 <script lang="ts">
-	import './auth.css';
+	import './user.css';
 	import Title from '$lib/components/Title.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Logo from '$lib/components/Logo.svelte';
