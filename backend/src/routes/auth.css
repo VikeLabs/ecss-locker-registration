@@ -1,0 +1,29 @@
+main {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--main-gap);
+	position: relative;
+	top: calc((var(--logo-size) + var(--main-gap)) / -3);
+}
+h1 {
+	font-size: theme(fontSize.2xl);
+	font-weight: theme(fontWeight.bold);
+	text-align: center;
+}
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	gap: theme(space.5);
+}
+footer {
+	font-weight: theme(fontWeight.bold);
+}
+footer a {
+	text-decoration: underline;
+	color: theme(colors.neutral.500);
+}

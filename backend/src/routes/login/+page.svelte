@@ -1,5 +1,6 @@
 <script lang="ts">
-	import './auth.css';
+	import '../auth.css';
+
 	import Title from '$lib/components/Title.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Logo from '$lib/components/Logo.svelte';
@@ -9,18 +10,16 @@
 	const mainGap = '1.5rem';
 </script>
 
-<Title />
+<Title value="Login" />
 <main style:--main-gap={mainGap} style:--logo-size={logoSize}>
 	<Logo size="6rem" />
 	<h1>Locker Registration</h1>
 	<form method="post">
-		<TextInput label="Name or Club" id="name" name="name" />
 		<TextInput label="Email" id="email" name="email" />
-		<TextInput label="Locker Number" id="locker-number" name="locker-number" />
-		<Button>Register</Button>
+		<Button>Login</Button>
 	</form>
 	<footer>
-		Already have an account?
-		<a href="./login">Log in.</a>
+		Don't have a locker?
+		<a href="./">Register</a>
 	</footer>
 </main>
