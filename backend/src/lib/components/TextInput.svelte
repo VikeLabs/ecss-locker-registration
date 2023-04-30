@@ -3,13 +3,17 @@
 	export let label: string;
 	export let name: string;
 	export let value: string = '';
+	export let error: string = '';
 </script>
 
 <div class="text-input">
 	<label for={id}>
 		{label}
 	</label>
-	<input type="text" {id} {name} required bind:value />
+	<input class:error type="text" {id} {name} required bind:value />
+	{#if error}
+		<span class="error-msg">* {error}</span>
+	{/if}
 </div>
 
 <style lang="postcss">
@@ -35,5 +39,13 @@
 		background: theme(colors.neutral.50);
 		color: theme(colors.neutral.700);
 		font-size: theme(fontSize.base);
+	}
+	input.error {
+		border-color: theme(colors.red.300);
+	}
+	.error-msg {
+		color: theme(colors.red.600);
+		font-size: theme(fontSize.sm);
+		font-weight: theme(fontWeight.medium)
 	}
 </style>
