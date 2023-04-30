@@ -11,13 +11,3 @@
 	<h1>Registered Lockers</h1>
 	<Menu rows={hardcodedLockers} />
 </main>
-
-<style lang="postcss">
-	main {
-		@apply w-full max-w-sm;
-		@apply flex flex-col items-center gap-2;
-	}
-	h1 {
-		@apply text-2xl font-bold;
-	}
-</style>
