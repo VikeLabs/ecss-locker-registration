@@ -15,9 +15,7 @@
 		<p><b>Register for</b>: {data.name}</p>
 		<p>
 			<b>Status</b>:
-			{#if data.status === 'available'}
-				<span class="status grey">Available</span>
-			{:else if data.status === 'claimed'}
+			{#if data.status === 'claimed'}
 				<span class="status green">Claimed</span>
 			{:else if data.status === 'expired'}
 				<span class="status red">Expired</span>
