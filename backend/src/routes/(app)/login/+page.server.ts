@@ -18,11 +18,12 @@ export const actions: Actions = {
 
 		if (emailExists) {
 			// TODO actually send email
+			// do this asyncronously to prevent timing 
 		}
 
-		cookies.set('user', email, { path: '/' });
-
 		// we send success result anyways to prevent email enumeration
+		// TODO make page that says "check your email"
+		login({ user: email }, cookies);
 		throw redirect(302, 'lockers');
 	}
 };

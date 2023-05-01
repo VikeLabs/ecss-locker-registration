@@ -1,6 +1,7 @@
 import { redirect, error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import sqlite3 from 'better-sqlite3';
+import { mustAuthorize } from '$lib/auth.server';
 
 export type LockerStatus = 'expired' | 'available' | 'claimed';
 export type Locker = {
@@ -26,10 +27,7 @@ const lockers: {
 };
 
 export const load: PageServerLoad<Locker> = ({ params, cookies }) => {
-	const user = cookies.get('user');
-	if (user === undefined) {
-		throw error(403);
-	}
+	const { user } = mustAuthorize(cookies);
 
 	const locker = params.id;
 
