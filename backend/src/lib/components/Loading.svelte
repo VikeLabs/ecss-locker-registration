@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let size: string = '100%';
+	export let size = '100%';
 </script>
 
 <div style:--size={size} class="lds-ring">

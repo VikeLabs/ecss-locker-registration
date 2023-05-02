@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Loading from './Loading.svelte';
 
-	export let compact: boolean = false;
-	export let loading: boolean = false;
+	export let compact = false;
+	export let loading = false;
 </script>
 
 <button class:compact class:loading on:click>

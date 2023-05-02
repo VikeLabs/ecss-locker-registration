@@ -3,10 +3,11 @@
 	import Button from '$lib/components/Button.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 	import TextInput from '$lib/components/TextInput.svelte';
-	import type { ActionData } from './$types';
-	import { enhance } from '$app/forms';
+	import { superForm } from '$lib/form.client';
+	import type { PageData } from './$types';
 
-	let loading = false;
+	export let data: PageData;
+	const { form, delayed, enhance, errors } = superForm(data.form);
 
 	const logoSize = '6rem';
 </script>
@@ -15,18 +16,15 @@
 <main style:--logo-size={logoSize}>
 	<Logo size="6rem" />
 	<h1>Locker Registration</h1>
-	<form
-		method="post"
-		use:enhance={() => {
-			loading = true;
-			return ({ update }) => {
-				loading = false;
-				update();
-			};
-		}}
-	>
-		<TextInput label="Email" id="email" name="email" />
-		<Button {loading}>Login</Button>
+	<form method="post" use:enhance>
+		<TextInput
+			label="Email"
+			id="email"
+			name="email"
+			bind:value={$form.email}
+			errors={$errors.email}
+		/>
+		<Button loading={$delayed}>Login</Button>
 	</form>
 	<footer>
 		Don't have a locker?

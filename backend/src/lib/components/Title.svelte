@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let value: string = '';
-	const base: string = 'ESS Locker Registration';
+	export let value = '';
+	const base = 'ESS Locker Registration';
 </script>
 
 <svelte:head>

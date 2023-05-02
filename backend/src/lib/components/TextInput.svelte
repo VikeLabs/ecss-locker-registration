@@ -2,18 +2,26 @@
 	export let id: string;
 	export let label: string;
 	export let name: string;
-	export let value: string = '';
-	export let error: string = '';
+	export let value = '';
+	export let errors: string[] = [];
 </script>
 
 <div class="text-input">
 	<label for={id}>
 		{label}
 	</label>
-	<input class:error type="text" {id} {name} required bind:value />
-	{#if error}
+	<input
+		class:error={(errors ?? []).length > 0}
+		type="text"
+		{id}
+		{name}
+		required
+		bind:value
+		{...$$restProps}
+	/>
+	{#each errors ?? [] as error}
 		<span class="error-msg">* {error}</span>
-	{/if}
+	{/each}
 </div>
 
 <style lang="postcss">
@@ -46,6 +54,6 @@
 	.error-msg {
 		color: theme(colors.red.600);
 		font-size: theme(fontSize.sm);
-		font-weight: theme(fontWeight.medium)
+		font-weight: theme(fontWeight.medium);
 	}
 </style>

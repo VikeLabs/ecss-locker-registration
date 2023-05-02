@@ -4,7 +4,7 @@ function range(start, end) {
 	return [...Array(1 + end - start).keys()].map((n) => start + n);
 }
 
-const lockers = [range(1, 200)].flat().map(x => x.toString());
+const lockers = [range(1, 200)].flat().map((x) => x.toString());
 // console.log(lockers)
 
 const db = sqlite3('db.sqlite3', { fileMustExist: true });

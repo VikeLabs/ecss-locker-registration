@@ -10,22 +10,6 @@ export type Locker = {
 	status: LockerStatus;
 };
 
-const lockers: {
-	[key: string]: {
-		name: string;
-		status: LockerStatus;
-	};
-} = {
-	'120': {
-		name: 'Malcolm Seyd',
-		status: 'expired'
-	},
-	'144': {
-		name: 'VikeSec',
-		status: 'claimed'
-	}
-};
-
 export const load: PageServerLoad<Locker> = ({ params, cookies }) => {
 	const { user } = mustAuthorize(cookies);
 
