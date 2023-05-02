@@ -65,7 +65,6 @@ export const actions: Actions = {
 				break;
 		}
 		const msg = 'Almost done! Check your email for a link to finish registering.';
-		return setMessage(form, { msg });
-		// throw redirect(302, `/flash?msg=${msg}`);
+		throw redirect(302, `/flash?msg=${msg}`);
 	}
 };
