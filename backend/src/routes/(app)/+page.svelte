@@ -7,7 +7,7 @@
 	import { superForm } from '$lib/form.client';
 
 	export let data: PageData;
-	const { form, delayed, enhance, errors, constraints } = superForm(data.form);
+	const { form, delayed, enhance, errors, constraints, message } = superForm(data.form);
 	$: console.log($errors);
 
 	const logoSize = '6rem';
@@ -17,6 +17,14 @@
 <main style:--logo-size={logoSize}>
 	<Logo size={logoSize} />
 	<h1>Locker Registration</h1>
+	{#if $message}
+		<!-- TODO fancier flash component -->
+		<p
+			class="font-bold text-xl border-2 rounded-lg p-2 border-green-200 bg-green-100 text-green-900"
+		>
+			{$message.msg}
+		</p>
+	{/if}
 	<form method="post" use:enhance>
 		<!-- <form method="post" use:enhance> -->
 		<TextInput

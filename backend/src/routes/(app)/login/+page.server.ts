@@ -1,10 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import sqlite3 from 'better-sqlite3';
 import { z } from 'zod';
 
-import { superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 import { login } from '$lib/auth.server';
+import { db } from '$lib/db';
 
 const formSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' })
@@ -23,25 +23,28 @@ export const actions: Actions = {
 		}
 		const { email } = form.data;
 
-		const db = sqlite3('db.sqlite3');
-		const emailExists = db.transaction(() => {
-			const schema = z.object({ userCount: z.number() });
-			const { userCount } = schema.parse(
-				db.prepare('SELECT COUNT(*) AS userCount FROM user WHERE email = ?').get(email)
-			);
+		const { countAll } = db.fn;
+		const { userCount } = z
+			.array(z.object({ userCount: z.number() }))
+			.length(1)
+			.parse(
+				await db
+					.selectFrom('user')
+					.select([countAll().as('userCount')])
+					.where('email', '=', email)
+					.execute()
+			)[0];
 
-			return userCount !== 0;
-		})();
-		db.close();
-
+		const emailExists = userCount !== 0;
+		console.log({ emailExists, email });
 		if (emailExists) {
 			// TODO actually send email
 			// do this asyncronously to prevent timing
+			login({ user: email }, cookies);
+			throw redirect(302, 'lockers');
 		}
-
 		// we send success result anyways to prevent email enumeration
-		// TODO make page that says "check your email"
-		login({ user: email }, cookies);
-		throw redirect(302, 'lockers');
+		// TODO flash message that says "check your email"
+		return setError(form, 'email', 'Account does not exist.');
 	}
 };
