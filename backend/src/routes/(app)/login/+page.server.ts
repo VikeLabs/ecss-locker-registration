@@ -24,19 +24,13 @@ export const actions: Actions = {
 		const { email } = form.data;
 
 		const { countAll } = db.fn;
-		const { userCount } = z
-			.array(z.object({ userCount: z.number() }))
-			.length(1)
-			.parse(
-				await db
-					.selectFrom('user')
-					.select([countAll().as('userCount')])
-					.where('email', '=', email)
-					.execute()
-			)[0];
+		const { userCount } = await db
+			.selectFrom('user')
+			.select([countAll<number>().as('userCount')])
+			.where('email', '=', email)
+			.executeTakeFirstOrThrow();
 
 		const emailExists = userCount !== 0;
-		console.log({ emailExists, email });
 		if (emailExists) {
 			// TODO actually send email
 			// do this asyncronously to prevent timing

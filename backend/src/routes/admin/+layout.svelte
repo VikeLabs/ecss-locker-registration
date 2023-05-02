@@ -12,6 +12,7 @@
 
 	:global(html, body) {
 		margin: 0;
+		/* min-height: 100vh; */
 		height: 100%;
 	}
 
@@ -25,6 +26,5 @@
 		justify-content: center;
 		box-sizing: border-box;
 
-		padding: 1.5rem;
 	}
 </style>

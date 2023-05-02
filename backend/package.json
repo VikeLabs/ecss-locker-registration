@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"seed-db": "node db/seed-lockers.js",
+		"db:seed": "node db/seed-lockers.js",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
