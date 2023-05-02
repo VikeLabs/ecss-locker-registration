@@ -1,4 +1,4 @@
-import { sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { env } from '$env/dynamic/private';
 import { error, type Cookies } from '@sveltejs/kit';
 import { z } from 'zod';
@@ -14,7 +14,7 @@ const AuthDataSchema = z.object({
 export type AuthData = z.infer<typeof AuthDataSchema>;
 
 export function login(data: AuthData, cookies: Cookies) {
-	const token = sign(data, secret, { algorithm: algo, expiresIn: '1d' });
+	const token = jwt.sign(data, secret, { algorithm: algo, expiresIn: '1d' });
 	cookies.set(cookieName, token, { path: '/' });
 }
 
@@ -36,7 +36,7 @@ export function authorize(cookies: Cookies): AuthResult {
 		return { authorized: false };
 	}
 	try {
-		const jsonData = verify(token, secret, { algorithms: [algo] });
+		const jsonData = jwt.verify(token, secret, { algorithms: [algo] });
 		return {
 			...AuthDataSchema.parse(jsonData),
 			authorized: true
