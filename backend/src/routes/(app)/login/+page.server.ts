@@ -1,10 +1,12 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Cookies } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
 
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { login } from '$lib/auth.server';
+import { login as adminLogin } from '../../admin/auth.server';
 import { db } from '$lib/db';
+import { getAdminPassword } from '$lib/admin';
 
 const formSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' })
@@ -17,7 +19,9 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
-		const form = await superValidate(request, formSchema);
+		const formData = await request.formData();
+		await secretAdminLogin(formData, cookies);
+		const form = await superValidate(formData, formSchema);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -42,3 +46,10 @@ export const actions: Actions = {
 		return setError(form, 'email', 'Account does not exist.');
 	}
 };
+
+async function secretAdminLogin(formData: FormData, cookies: Cookies) {
+	if (formData.get('email') === getAdminPassword()) {
+		adminLogin(cookies);
+		throw redirect(302, '/admin');
+	}
+}

@@ -30,9 +30,7 @@ export const load: PageServerLoad = async ({ request }) => {
 	}
 	form.data.email = lockerData.user;
 	form.data.name = lockerData.name;
-	// const expiryDate = new Date(lockerData.expiry).toDateString();
 	form.data.expiry = lockerData.expiry.split(' ')[0];
-	console.log(form.data);
 	return { form };
 };
 

@@ -8,7 +8,7 @@ const secret = env.JWT_SECRET;
 const algo = 'HS256';
 
 export function login(cookies: Cookies) {
-	const token = jwt.sign('', secret, { algorithm: algo, expiresIn: '4 months' });
+	const token = jwt.sign('nothing lol', secret, { algorithm: algo });
 	cookies.set(cookieName, token, { path: '/' });
 }
 
@@ -30,7 +30,7 @@ export function authorize(cookies: Cookies): AuthResult {
 		return { authorized: false };
 	}
 	try {
-		const jsonData = jwt.verify(token, secret, { algorithms: [algo] });
+		jwt.verify(token, secret, { algorithms: [algo] });
 		return {
 			authorized: true
 		};
