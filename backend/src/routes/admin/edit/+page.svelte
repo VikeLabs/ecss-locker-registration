@@ -39,6 +39,7 @@
 			bind:value={$form.locker}
 			errors={$errors.locker}
 			{...$constraints.locker}
+			disabled
 		/>
 		<DateInput
 			label="Expiry"
@@ -48,8 +49,6 @@
 			errors={$errors.expiry}
 			{...$constraints.locker}
 		/>
-		<!-- <label for="expiry">Expiry</label>
-		<input type="date" id="expiry" name="expiry" bind:value={$form.expiry} /> -->
 		<Button loading={$delayed}>Edit</Button>
 	</form>
 </main>

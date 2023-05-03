@@ -21,6 +21,7 @@
 			name="locker"
 			bind:value={$form.locker}
 			errors={$errors.locker}
+			disabled
 			{...$constraints.locker}
 		/>
 		<Button loading={$delayed}>Delete</Button>

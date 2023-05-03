@@ -24,6 +24,7 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, { form });
 		}
+		console.log(form.data)
 		const { email, locker, name } = form.data;
 
 		const result = await db.transaction().execute(async (trx) => {
@@ -36,12 +37,13 @@ export const actions: Actions = {
 
 			const expiry = new Date();
 			expiry.setMonth(expiry.getMonth() + 1);
-			const result = await trx
+			const q = trx
 				.insertInto('registration')
 				.onConflict((c) => c.doNothing())
 				.columns(['user', 'locker', 'name', 'expiry'])
-				.values({ user: email, locker, name, expiry: sql`datetime(${expiry.toISOString()})` })
-				.executeTakeFirstOrThrow();
+				.values({ user: email, locker, name, expiry: sql`datetime(${expiry.toISOString()})` });
+			console.log(await q.explain());
+			const result = await q.executeTakeFirstOrThrow();
 			if (result.numInsertedOrUpdatedRows === 0n) {
 				return 'locker-taken';
 			}

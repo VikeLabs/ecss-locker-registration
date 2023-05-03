@@ -4,6 +4,8 @@
 	export let name: string;
 	export let value = '';
 	export let errors: string[] = [];
+	/** Makes the element appear disabled, although it's still submitted */
+	export let disabled = false;
 </script>
 
 <div class="text-input">
@@ -15,10 +17,14 @@
 		type="text"
 		{id}
 		{name}
+		{disabled}
 		required
 		bind:value
 		{...$$restProps}
 	/>
+	{#if disabled}
+		<input class="hidden" bind:value {name} />
+	{/if}
 	{#each errors ?? [] as error}
 		<span class="error-msg">* {error}</span>
 	{/each}
@@ -50,6 +56,13 @@
 	}
 	input.error {
 		border-color: theme(colors.red.300);
+	}
+	input.hidden {
+		display: none;
+	}
+	input:disabled {
+		background: theme(colors.neutral.200);
+		color: theme(colors.neutral.500);
 	}
 	.error-msg {
 		color: theme(colors.red.600);
