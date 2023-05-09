@@ -24,7 +24,7 @@
 
 <style lang="postcss">
 	:global(body) {
-		display: block;
+		display: block !important;
 	}
 	table {
 		border-collapse: separate;
