@@ -7,7 +7,7 @@
 
 <div class="scrollable">
 	<table>
-		<tr class="bg-neutral-200">
+		<tr class="bg-neutral-200 z-10">
 			<th />
 			<th>Locker</th>
 			<th>Status</th>
@@ -23,18 +23,22 @@
 </div>
 
 <style lang="postcss">
-	.scrollable {
-		overflow: scroll;
-		position: absolute;
-		inset: 0;
+	:global(body) {
+		display: block;
 	}
 	table {
-		border-collapse: collapse;
+		border-collapse: separate;
+		border-spacing: 0;
 		width: 100%;
+		position: relative;
 	}
 	th {
 		border: 1px black solid;
+		border-top: none;
+		border-right: none;
 		padding: theme(space.1);
 		position: sticky;
+		top: 0;
+		@apply bg-neutral-200;
 	}
 </style>

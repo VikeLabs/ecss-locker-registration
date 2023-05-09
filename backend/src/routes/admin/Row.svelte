@@ -49,6 +49,8 @@
 	td,
 	th {
 		border: 1px black solid;
+		border-top: none;
+		border-right: none;
 		@apply px-1 py-0.5;
 	}
 	.hide {
