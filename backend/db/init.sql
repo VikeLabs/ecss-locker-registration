@@ -1,3 +1,4 @@
+-- TODO remove this table, it's redundant with the registration table
 CREATE TABLE IF NOT EXISTS user(
     email TEXT NOT NULL PRIMARY KEY,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -12,7 +13,7 @@ CREATE TABLE IF NOT EXISTS registration(
     user TEXT NOT NULL,
     name TEXT NOT NULL,
     expiry DATETIME NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT 1,
+    active BOOLEAN NOT NULL DEFAULT 1, -- TODO change to deletedAt (nullable)
     PRIMARY KEY(locker, user),
     FOREIGN KEY(locker) REFERENCES locker(id),
     FOREIGN KEY(user) REFERENCES user(email)
