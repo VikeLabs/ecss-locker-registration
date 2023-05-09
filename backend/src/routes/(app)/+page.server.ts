@@ -2,7 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import sqlite3 from 'better-sqlite3';
 import { z } from 'zod';
-import { setError, setMessage, superValidate } from 'sveltekit-superforms/server';
+import { message, setError, setMessage, superValidate } from 'sveltekit-superforms/server';
 
 const MAX_REGISTERED = 1;
 
@@ -65,6 +65,7 @@ export const actions: Actions = {
 				break;
 		}
 		const msg = 'Almost done! Check your email for a link to finish registering.';
-		throw redirect(302, `/flash?msg=${msg}`);
+		return message(form, { msg });
+		// throw redirect(302, `/flash?msg=${msg}`);
 	}
 };
