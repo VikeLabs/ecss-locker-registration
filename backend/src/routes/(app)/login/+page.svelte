@@ -5,9 +5,11 @@
 	import TextInput from '$lib/components/TextInput.svelte';
 	import { superForm } from '$lib/form.client';
 	import type { PageData } from './$types';
+	import Flash from '$lib/components/Flash.svelte';
+	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data: PageData;
-	const { form, delayed, enhance, errors } = superForm(data.form);
+	const { form, delayed, enhance, errors, message } = superForm(data.form);
 
 	const logoSize = '6rem';
 </script>
@@ -16,6 +18,9 @@
 <main style:--logo-size={logoSize}>
 	<Logo size="6rem" />
 	<h1>Locker Registration</h1>
+	{#if $message}
+		<Flash {...$message} />
+	{/if}
 	<form method="post" use:enhance>
 		<TextInput
 			label="Email"

@@ -2,7 +2,7 @@ import { fail, redirect, type Cookies } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
 
-import { setError, superValidate } from 'sveltekit-superforms/server';
+import { message, setError, setMessage, superValidate } from 'sveltekit-superforms/server';
 import { login } from '$lib/auth.server';
 import { login as adminLogin } from '../../admin/auth.server';
 import { db } from '$lib/db';
@@ -39,11 +39,12 @@ export const actions: Actions = {
 			// TODO actually send email
 			// do this asyncronously to prevent timing
 			login({ user: email }, cookies);
-			throw redirect(302, 'lockers');
+			// throw redirect(302, 'lockers');
 		}
 		// we send success result anyways to prevent email enumeration
 		// TODO flash message that says "check your email"
-		return setError(form, 'email', 'Account does not exist.');
+		// return setError(form, 'email', 'Account does not exist.');
+		return message(form, { msg: 'Check your email for a link to login.' });
 	}
 };
 
