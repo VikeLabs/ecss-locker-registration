@@ -9,7 +9,7 @@ const formSchema = z.object({
 	name: z.string(),
 	email: z.string().email(),
 	locker: z.string(),
-	expiry: z.string()
+	expiry: z.date()
 });
 
 export const load: PageServerLoad = async ({ request }) => {
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ request }) => {
 	}
 	form.data.email = lockerData.user;
 	form.data.name = lockerData.name;
-	form.data.expiry = lockerData.expiry.split(' ')[0];
+	form.data.expiry = new Date(lockerData.expiry);
 	return { form };
 };
 
@@ -41,9 +41,6 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 		const { email, locker, name, expiry } = form.data;
-
-		const expiryDT = new Date(expiry);
-
 		if (Number.isNaN(expiry.valueOf())) {
 			return setError(form, 'expiry', 'Invalid date');
 		}
@@ -58,7 +55,7 @@ export const actions: Actions = {
 
 			const result = await trx
 				.updateTable('registration')
-				.set({ user: email, name, expiry: sql`datetime(${expiryDT.toISOString()})` })
+				.set({ user: email, name, expiry: sql`datetime(${expiry.toISOString()})` })
 				.where('locker', '=', locker)
 				.executeTakeFirst();
 

@@ -6,9 +6,11 @@
 	import { superForm } from '$lib/form.client';
 	import Back from '$lib/components/Back.svelte';
 	import DateInput from '$lib/components/DateInput.svelte';
+	import { dateProxy } from 'sveltekit-superforms/client';
 
 	export let data: PageData;
 	const { form, delayed, enhance, errors, constraints } = superForm(data.form);
+	const expiryDate = dateProxy(form, 'expiry', { format: 'date' });
 </script>
 
 <Back />
@@ -45,7 +47,7 @@
 			label="Expiry"
 			id="expiry"
 			name="expiry"
-			bind:value={$form.expiry}
+			bind:value={$expiryDate}
 			errors={$errors.expiry}
 			{...$constraints.locker}
 		/>

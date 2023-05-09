@@ -19,7 +19,7 @@
 	<td>{status}</td>
 	<td>{name}</td>
 	<td>{user}</td>
-	<td>{expiry?.toLocaleDateString() ?? null}</td>
+	<td>{expiry?.toDateString() ?? null}</td>
 	<td>
 		{#if status === 'available'}
 			<a href="admin/register?locker={locker}"><button>Register</button></a>

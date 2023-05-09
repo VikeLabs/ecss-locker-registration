@@ -4,17 +4,20 @@ import { z } from 'zod';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms/server';
 import { db } from '$lib/db';
 import { sql } from 'kysely';
+import { defaultExpiry } from '$lib/date';
 
 const formSchema = z.object({
 	name: z.string(),
 	email: z.string().email(),
-	locker: z.string()
+	locker: z.string(),
+	expiry: z.date()
 });
 
 export const load: PageServerLoad = async ({ request }) => {
 	const form = await superValidate(formSchema);
 	const url = new URL(request.url);
 	form.data.locker = url.searchParams.get('locker') ?? '';
+	form.data.expiry = defaultExpiry(new Date());
 	return { form };
 };
 
@@ -24,8 +27,7 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-		console.log(form.data)
-		const { email, locker, name } = form.data;
+		const { email, locker, name, expiry } = form.data;
 
 		const result = await db.transaction().execute(async (trx) => {
 			await trx
@@ -35,14 +37,11 @@ export const actions: Actions = {
 				.values({ email })
 				.execute();
 
-			const expiry = new Date();
-			expiry.setMonth(expiry.getMonth() + 1);
 			const q = trx
 				.insertInto('registration')
 				.onConflict((c) => c.doNothing())
 				.columns(['user', 'locker', 'name', 'expiry'])
 				.values({ user: email, locker, name, expiry: sql`datetime(${expiry.toISOString()})` });
-			console.log(await q.explain());
 			const result = await q.executeTakeFirstOrThrow();
 			if (result.numInsertedOrUpdatedRows === 0n) {
 				return 'locker-taken';
