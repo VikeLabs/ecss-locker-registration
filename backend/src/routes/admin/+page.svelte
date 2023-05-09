@@ -23,8 +23,10 @@
 </div>
 
 <style lang="postcss">
-	:global(body) {
-		display: block !important;
+	.scrollable {
+		overflow: scroll;
+		position: absolute;
+		inset: 0;
 	}
 	table {
 		border-collapse: separate;
