@@ -1,11 +1,43 @@
-import { redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { error, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import { mustAuthorize } from '$lib/auth.server';
+import { sendTransferEmail } from '$lib/email';
+import { z } from 'zod';
+import { setError, superValidate } from 'sveltekit-superforms/server';
+import { db } from '$lib/db';
+
+const formSchema = z.object({
+	email: z.string().email()
+});
+
+export const load: PageServerLoad = async ({ params, cookies }) => {
+	mustAuthorize(cookies); // TODO remove after testing its not needed
+	const form = await superValidate(formSchema);
+	return { form };
+};
 
 export const actions: Actions = {
-	default: ({ params, cookies }) => {
-		const { user } = mustAuthorize(cookies);
-		console.log(`UNIMPLEMENTED: transferring locker ${params.id}`);
-		throw redirect(302, '.');
+	default: async ({ params, cookies, request }) => {
+		const { user } = mustAuthorize(cookies); // TODO remove after testing its not needed
+		const locker = params.id;
+
+		const form = await superValidate(request, formSchema);
+		if (!form.valid) {
+			return { form };
+		}
+		const { email } = form.data;
+		const { count } = await db
+			.selectFrom('registration')
+			.select([db.fn.countAll<number>().as('count')])
+			.where('user', '=', user)
+			.where('locker', '=', locker)
+			.executeTakeFirstOrThrow();
+
+		if (count === 0) {
+			return error(403, { message: 'You do not own this locker' });
+		}
+
+		sendTransferEmail(email, locker);
+		throw redirect(302, '..');
 	}
 };
