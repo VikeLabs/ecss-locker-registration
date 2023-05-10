@@ -2,7 +2,6 @@ import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { logout, mustAuthorize } from '$lib/auth.server';
 import { db } from '$lib/db';
-import { s } from 'vitest/dist/index-5aad25c1';
 import { base } from '$app/paths';
 
 export const actions: Actions = {
