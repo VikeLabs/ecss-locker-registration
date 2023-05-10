@@ -1,4 +1,4 @@
-<a href="./">
+<a href="./" on:click|preventDefault={() => history.back()}>
 	<svg
 		class="h-8 w-8 absolute top-8 left-8 hover:cursor-pointer"
 		height="21"
