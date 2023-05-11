@@ -1,25 +1,13 @@
 import { base } from '$app/paths';
-import { env } from '$env/dynamic/private';
-import { loginCookie } from '$lib/auth.server';
+import { login } from '$lib/auth.server';
 import { defaultExpiry } from '$lib/date';
 import { db } from '$lib/db';
 import { parseMagicToken } from '$lib/magic';
-import { json, type RequestHandler } from '@sveltejs/kit';
+import { json, redirect } from '@sveltejs/kit';
 import { sql } from 'kysely';
+import type { PageServerLoad } from './$types';
 
-const urlPrefix = `${env.URL_PREFIX ?? ''}${base}`;
-
-function loginResponse(user: string) {
-	return new Response('', {
-		status: 302,
-		headers: {
-			location: `${urlPrefix}/lockers`,
-			'set-cookie': loginCookie({ user })
-		}
-	});
-}
-
-export const GET: RequestHandler = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({ params, cookies }) => {
 	if (!params.token) {
 		return json({ message: 'Missing token' }, { status: 400 });
 	}
@@ -36,18 +24,24 @@ export const GET: RequestHandler = async ({ params, cookies }) => {
 				expiry: sql`datetime(${defaultExpiry().toISOString()})`
 			})
 			.executeTakeFirstOrThrow();
-		return loginResponse(user);
+		login(data, cookies);
+		throw redirect(302, `${base}/lockers`);
 	} else if (data.type === 'login') {
-		return loginResponse(data.user);
+		login(data, cookies);
+		throw redirect(302, `${base}/lockers`);
 	} else if (data.type === 'transfer') {
 		const { user, locker } = data;
+		await db
+			.insertInto('user')
+			.onConflict((c) => c.doNothing())
+			.values({ email: user })
+			.execute();
 		await db
 			.updateTable('registration')
 			.set({ user })
 			.where('locker', '=', locker)
 			.executeTakeFirstOrThrow();
-		return Response.redirect(`${urlPrefix}/lockers/${encodeURIComponent(locker)}`);
+		throw redirect(302, `${base}/lockers/${encodeURIComponent(locker)}`);
 	}
-
-	return new Response('unreachable', { status: 500 });
+	return {};
 };

@@ -3,7 +3,7 @@ import { env } from '$env/dynamic/private';
 import { makeMagicToken } from './magic';
 
 const prefix = env.URL_PREFIX ?? '';
-const urlBase = `${prefix}/${base}`;
+const urlBase = prefix + base;
 
 function makeLink(path: string) {
 	return new URL(path, urlBase);
