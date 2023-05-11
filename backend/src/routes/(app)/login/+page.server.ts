@@ -7,6 +7,7 @@ import { login } from '$lib/auth.server';
 import { login as adminLogin } from '../../admin/auth.server';
 import { db } from '$lib/db';
 import { getAdminPassword } from '$lib/admin';
+import { sendLoginEmail } from '$lib/email';
 
 const formSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' })
@@ -36,14 +37,9 @@ export const actions: Actions = {
 
 		const emailExists = userCount !== 0;
 		if (emailExists) {
-			// TODO actually send email
-			// do this asyncronously to prevent timing
-			login({ user: email }, cookies);
-			// throw redirect(302, 'lockers');
+			sendLoginEmail(email);
 		}
 		// we send success result anyways to prevent email enumeration
-		// TODO flash message that says "check your email"
-		// return setError(form, 'email', 'Account does not exist.');
 		return message(form, { msg: 'Check your email for a link to login.' });
 	}
 };

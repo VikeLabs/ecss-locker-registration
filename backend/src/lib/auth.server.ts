@@ -13,9 +13,16 @@ const AuthDataSchema = z.object({
 });
 export type AuthData = z.infer<typeof AuthDataSchema>;
 
+function makeToken(data: AuthData) {
+	return jwt.sign(data, secret, { algorithm: algo, expiresIn: '1d' });
+}
+
+export function loginCookie(data: AuthData) {
+	return `${cookieName}=${makeToken(data)}; Path=/`;
+}
+
 export function login(data: AuthData, cookies: Cookies) {
-	const token = jwt.sign(data, secret, { algorithm: algo, expiresIn: '1d' });
-	cookies.set(cookieName, token, { path: '/' });
+	cookies.set(cookieName, makeToken(data), { path: '/' });
 }
 
 export function logout(cookies: Cookies) {

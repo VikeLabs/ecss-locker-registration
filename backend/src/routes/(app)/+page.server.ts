@@ -3,6 +3,8 @@ import type { Actions, PageServerLoad } from './$types';
 import sqlite3 from 'better-sqlite3';
 import { z } from 'zod';
 import { message, setError, setMessage, superValidate } from 'sveltekit-superforms/server';
+import { db } from '$lib/db';
+import { sendRegisterEmail } from '$lib/email';
 
 const MAX_REGISTERED = 1;
 
@@ -25,32 +27,30 @@ export const actions: Actions = {
 		}
 		const { email, locker, name } = form.data;
 
-		const db = sqlite3('db.sqlite3');
-		const result = db.transaction(() => {
-			db.prepare('INSERT OR IGNORE INTO user(email) VALUES(?)').run(email);
-
-			const schema = z.object({ registered: z.number() });
-			const { registered } = schema.parse(
-				db.prepare('SELECT COUNT(*) AS registered FROM registration WHERE user = ?').get(email)
-			);
-
+		const result = await db.transaction().execute(async (trx) => {
+			await trx
+				.insertInto('user')
+				.onConflict((c) => c.doNothing())
+				.values({ email })
+				.execute();
+			const { registered } = await trx
+				.selectFrom('registration')
+				.select(db.fn.countAll<number>().as('registered'))
+				.where('user', '=', email)
+				.executeTakeFirstOrThrow();
 			if (registered + 1 > MAX_REGISTERED) {
 				return 'limit-exceeded';
 			}
-
-			const expiry = new Date();
-			expiry.setMonth(expiry.getMonth() + 1);
-			const { changes: registrationChanges } = db
-				.prepare(
-					'INSERT OR IGNORE INTO registration(user,locker,name,expiry) VALUES(?,?,?,datetime(?))'
-				)
-				.run(email, locker, name, expiry.toISOString());
-			if (registrationChanges == 0) {
+			const { lockers } = await trx
+				.selectFrom('registration')
+				.select(db.fn.countAll<number>().as('lockers'))
+				.where('locker', '=', locker)
+				.executeTakeFirstOrThrow();
+			if (lockers > 0) {
 				return 'locker-taken';
 			}
 			return 'ok';
-		})();
-		db.close();
+		});
 
 		switch (result) {
 			case 'locker-taken':
@@ -61,7 +61,7 @@ export const actions: Actions = {
 				break;
 			case 'ok':
 				// TODO send verification email
-				console.log('TODO send verification email');
+				sendRegisterEmail(email, locker, name);
 				break;
 		}
 		const msg = 'Almost done! Check your email for a link to finish registering.';
