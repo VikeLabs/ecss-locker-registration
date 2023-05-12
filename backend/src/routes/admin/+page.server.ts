@@ -1,8 +1,8 @@
 import { db } from '$lib/db';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
-	// TODO move to API route and try fetch?
+export const load: PageServerLoad = async ({ depends }) => {
+	depends('db:registration');
 	const registration = await db
 		.selectFrom('locker')
 		.leftJoin('registration', 'locker.id', 'registration.locker')

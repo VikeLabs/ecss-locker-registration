@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
+
 	export let status: 'claimed' | 'available' | 'expired';
 	export let locker: string;
 	export let name: string | null;
@@ -7,6 +9,17 @@
 
 	export let checked = false;
 	let editing = false;
+
+	async function renew() {
+		await fetch('admin/renew', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ locker })
+		});
+		invalidate('db:registration');
+	}
 </script>
 
 <tr class={status} class:checked>
@@ -28,7 +41,7 @@
 			<a href="admin/delete?locker={locker}"><button>Delete</button></a>
 		{/if}
 		{#if status === 'expired'}
-			<button>Renew</button>
+			<button on:click={renew}>Renew</button>
 		{/if}
 	</td>
 </tr>
