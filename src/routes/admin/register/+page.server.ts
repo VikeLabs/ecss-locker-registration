@@ -1,40 +1,44 @@
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
-import { z } from 'zod';
-import { setError, superValidate } from 'sveltekit-superforms/server';
-import { db } from '$lib/db';
-import { defaultExpiry } from '$lib/date';
+import { fail, redirect } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
+import { z } from "zod";
+import { setError, superValidate } from "sveltekit-superforms/server";
+import { db } from "$lib/db";
+import { defaultExpiry } from "$lib/date";
 
 const formSchema = z.object({
-	name: z.string(),
-	email: z.string().email(),
-	locker: z.string(),
-	expiry: z.date()
+  name: z.string(),
+  email: z.string().email(),
+  locker: z.string(),
+  expiry: z.date(),
 });
 
 export const load: PageServerLoad = async ({ request }) => {
-	const form = await superValidate(formSchema);
-	const url = new URL(request.url);
-	form.data.locker = url.searchParams.get('locker') ?? '';
-	form.data.expiry = defaultExpiry(new Date());
-	return { form };
+  const form = await superValidate(formSchema);
+  const url = new URL(request.url);
+  form.data.locker = url.searchParams.get("locker") ?? "";
+  form.data.expiry = defaultExpiry(new Date());
+  return { form };
 };
 
 export const actions: Actions = {
-	default: async ({ request, fetch }) => {
-		const form = await superValidate(request, formSchema);
-		if (!form.valid) {
-			return fail(400, { form });
-		}
-		const resp = await fetch('/admin/api/lockers', {
-			method: 'POST',
-			body: JSON.stringify(form.data)
-		});
-		const body = await resp.json();
-		const { err } = body;
-		if (err === 'locker-taken') {
-			return setError(form, 'locker', 'This locker is taken, please register another');
-		}
-		throw redirect(302, `./`);
-	}
+  default: async ({ request, fetch }) => {
+    const form = await superValidate(request, formSchema);
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+    const resp = await fetch("/admin/api/lockers", {
+      method: "POST",
+      body: JSON.stringify(form.data),
+    });
+    const body = await resp.json();
+    const { err } = body;
+    if (err === "locker-taken") {
+      return setError(
+        form,
+        "locker",
+        "This locker is taken, please register another"
+      );
+    }
+    throw redirect(302, `./`);
+  },
 };

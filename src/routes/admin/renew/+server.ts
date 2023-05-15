@@ -1,22 +1,22 @@
-import { db } from '$lib/db';
-import type { RequestHandler } from './$types';
-import { defaultExpiry } from '$lib/date';
-import { z } from 'zod';
+import { db } from "$lib/db";
+import type { RequestHandler } from "./$types";
+import { defaultExpiry } from "$lib/date";
+import { z } from "zod";
 
 const schema = z.object({
-	locker: z.string()
+  locker: z.string(),
 });
 
 export const POST: RequestHandler = async ({ request }) => {
-	const parsed = schema.safeParse(await request.json());
-	if (!parsed.success) {
-		return new Response('Missing locker', { status: 400 });
-	}
-	const { locker } = parsed.data;
-	await db
-		.updateTable('registration')
-		.where('locker', '=', locker)
-		.set({ expiry: defaultExpiry() })
-		.executeTakeFirstOrThrow();
-	return new Response();
+  const parsed = schema.safeParse(await request.json());
+  if (!parsed.success) {
+    return new Response("Missing locker", { status: 400 });
+  }
+  const { locker } = parsed.data;
+  await db
+    .updateTable("registration")
+    .where("locker", "=", locker)
+    .set({ expiry: defaultExpiry() })
+    .executeTakeFirstOrThrow();
+  return new Response();
 };
