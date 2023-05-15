@@ -21,28 +21,17 @@ export const load: PageServerLoad = async ({ request }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, fetch }) => {
 		const form = await superValidate(request, formSchema);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-		const { email, locker, name, expiry } = form.data;
-
-		const result = await db.transaction().execute(async (trx) => {
-			await trx.insertInto('user').ignore().columns(['email']).values({ email }).execute();
-
-			const q = trx
-				.insertInto('registration')
-				.ignore()
-				.columns(['user', 'locker', 'name', 'expiry'])
-				.values({ user: email, locker, name, expiry });
-			const result = await q.executeTakeFirstOrThrow();
-			if (result.numInsertedOrUpdatedRows === 0n) {
-				return 'locker-taken';
-			}
-			return 'ok';
+		const resp = await fetch('/admin/api/lockers', {
+			method: 'POST',
+			body: JSON.stringify([form.data])
 		});
-		if (result === 'locker-taken') {
+		const { err } = await resp.json();
+		if (err === 'locker-taken') {
 			return setError(form, 'locker', 'This locker is taken, please register another');
 		}
 		throw redirect(302, `./`);

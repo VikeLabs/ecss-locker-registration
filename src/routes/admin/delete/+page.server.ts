@@ -17,17 +17,17 @@ export const load: PageServerLoad = async ({ request }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, fetch }) => {
 		const form = await superValidate(request, formSchema);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
 		const { locker } = form.data;
-		const result = await db
-			.deleteFrom('registration')
-			.where('locker', '=', locker)
-			.executeTakeFirst();
-		if (result.numDeletedRows === 0n) {
+		const resp = await fetch('/admin/api/lockers', {
+			method: 'DELETE',
+			body: JSON.stringify([locker])
+		});
+		if (resp.status === 404) {
 			return setError(form, 'locker', "This locker isn't registered, try another");
 		}
 		throw redirect(302, `./`);
