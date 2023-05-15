@@ -31,13 +31,15 @@ export const actions: Actions = {
 		const { countAll } = db.fn;
 		const { userCount } = await db
 			.selectFrom('user')
-			.select([countAll<number>().as('userCount')])
+			.select([countAll<string>().as('userCount')])
 			.where('email', '=', email)
 			.executeTakeFirstOrThrow();
 
-		const emailExists = userCount !== 0;
+		const emailExists = +userCount !== 0;
 		if (emailExists) {
 			sendLoginEmail(email);
+		} else {
+			console.log("TODO send email telling user they don't have an account");
 		}
 		// we send success result anyways to prevent email enumeration
 		return message(form, { msg: 'Check your email for a link to login.' });

@@ -1,17 +1,17 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import sqlite3 from 'better-sqlite3';
 import { logout, mustAuthorize } from '$lib/auth.server';
+import { db } from '$lib/db';
 
-export const load: PageServerLoad = ({ cookies }) => {
+export const load: PageServerLoad = async ({ cookies }) => {
 	const { user } = mustAuthorize(cookies);
 
-	const db = sqlite3('db.sqlite3');
-	const result = db
-		.prepare('SELECT name, locker FROM registration WHERE user = ? AND active')
-		.iterate(user) as any;
-	const lockers = [...result];
-	return { locker: lockers };
+	const result = await db
+		.selectFrom('registration')
+		.select(['name', 'locker'])
+		.where('user', '=', user)
+		.execute();
+	return { locker: result };
 };
 
 export const actions: Actions = {

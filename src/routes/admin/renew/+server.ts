@@ -1,5 +1,4 @@
 import { db } from '$lib/db';
-import { sql } from 'kysely';
 import type { RequestHandler } from './$types';
 import { defaultExpiry } from '$lib/date';
 import { z } from 'zod';
@@ -17,7 +16,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	await db
 		.updateTable('registration')
 		.where('locker', '=', locker)
-		.set({ expiry: sql`datetime(${defaultExpiry().toISOString()})` })
+		.set({ expiry: defaultExpiry() })
 		.executeTakeFirstOrThrow();
 	return new Response();
 };

@@ -17,15 +17,15 @@ export const actions: Actions = {
 
 			const { count } = await trx
 				.selectFrom('registration')
-				.select([db.fn.countAll<number>().as('count')])
+				.select([db.fn.countAll<string>().as('count')])
 				.where('user', '=', user)
 				.executeTakeFirstOrThrow();
-			return count > 0;
+			return +count > 0;
 		});
 		if (!hasLockers) {
 			// go get a new one
 			logout(cookies);
-			throw redirect(302, `${base}/register`);
+			throw redirect(302, `${base}`);
 		}
 		throw redirect(302, '..');
 	}

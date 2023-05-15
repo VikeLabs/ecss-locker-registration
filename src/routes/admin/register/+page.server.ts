@@ -1,9 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
-import { setError, setMessage, superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 import { db } from '$lib/db';
-import { sql } from 'kysely';
 import { defaultExpiry } from '$lib/date';
 
 const formSchema = z.object({
@@ -30,18 +29,13 @@ export const actions: Actions = {
 		const { email, locker, name, expiry } = form.data;
 
 		const result = await db.transaction().execute(async (trx) => {
-			await trx
-				.insertInto('user')
-				.onConflict((c) => c.doNothing())
-				.columns(['email'])
-				.values({ email })
-				.execute();
+			await trx.insertInto('user').ignore().columns(['email']).values({ email }).execute();
 
 			const q = trx
 				.insertInto('registration')
-				.onConflict((c) => c.doNothing())
+				.ignore()
 				.columns(['user', 'locker', 'name', 'expiry'])
-				.values({ user: email, locker, name, expiry: sql`datetime(${expiry.toISOString()})` });
+				.values({ user: email, locker, name, expiry });
 			const result = await q.executeTakeFirstOrThrow();
 			if (result.numInsertedOrUpdatedRows === 0n) {
 				return 'locker-taken';

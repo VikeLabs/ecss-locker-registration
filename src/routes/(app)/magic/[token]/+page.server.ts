@@ -4,10 +4,9 @@ import { defaultExpiry } from '$lib/date';
 import { db } from '$lib/db';
 import { parseMagicToken } from '$lib/magic';
 import { json, redirect } from '@sveltejs/kit';
-import { sql } from 'kysely';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
 	if (!params.token) {
 		return json({ message: 'Missing token' }, { status: 400 });
 	}
@@ -16,12 +15,12 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 		const { user, locker, name } = data;
 		await db
 			.insertInto('registration')
-			.onConflict((c) => c.doNothing())
+			.ignore()
 			.values({
 				user,
 				name,
 				locker,
-				expiry: sql`datetime(${defaultExpiry().toISOString()})`
+				expiry: defaultExpiry()
 			})
 			.executeTakeFirstOrThrow();
 		login(data, cookies);
@@ -31,11 +30,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 		throw redirect(302, `${base}/lockers`);
 	} else if (data.type === 'transfer') {
 		const { user, locker } = data;
-		await db
-			.insertInto('user')
-			.onConflict((c) => c.doNothing())
-			.values({ email: user })
-			.execute();
+		await db.insertInto('user').ignore().values({ email: user }).execute();
 		await db
 			.updateTable('registration')
 			.set({ user })

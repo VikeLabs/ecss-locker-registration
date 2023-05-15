@@ -13,23 +13,24 @@ export type Locker = {
 	status: LockerStatus;
 };
 
-export const load: PageServerLoad<Locker> = ({ params, cookies }) => {
+export const load: PageServerLoad<Locker> = async ({ params, cookies }) => {
 	const { user } = mustAuthorize(cookies);
-
 	const locker = params.id;
 
-	const db = sqlite3('db.sqlite3');
-	const result = db
-		.prepare('SELECT name, expiry FROM registration WHERE user = ? AND locker = ? AND active')
-		.get(user, locker) as any; // TODO zod
+	const result = await db
+		.selectFrom('registration')
+		.select(['name', 'expiry'])
+		.where('user', '=', user)
+		.where('locker', '=', locker)
+		.executeTakeFirst();
 	if (result === undefined) {
 		throw error(404, { message: "you haven't registered this locker" });
 	}
 	const { name, expiry } = result;
+
 	let status: LockerStatus = 'claimed';
-	const expiresOn = Date.parse(expiry);
 	const now = Date.now();
-	if (expiresOn < now) {
+	if (expiry.valueOf() < now) {
 		status = 'expired';
 	}
 
@@ -41,7 +42,7 @@ export const actions: Actions = {
 		const { user } = mustAuthorize(cookies);
 		const locker = params.id;
 		db.updateTable('registration')
-			.set({ expiry: sql`datetime(${defaultExpiry().toISOString()})` })
+			.set({ expiry: defaultExpiry() })
 			.where('user', '=', user) // SECURITY
 			.where('locker', '=', locker)
 			.execute();

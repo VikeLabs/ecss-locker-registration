@@ -6,7 +6,6 @@
 	import { superForm } from '$lib/form.client';
 	import type { PageData } from './$types';
 	import Flash from '$lib/components/Flash.svelte';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data: PageData;
 	const { form, delayed, enhance, errors, message } = superForm(data.form);

@@ -28,12 +28,12 @@ export const actions: Actions = {
 		const { email } = form.data;
 		const { count } = await db
 			.selectFrom('registration')
-			.select([db.fn.countAll<number>().as('count')])
+			.select([db.fn.countAll<string>().as('count')])
 			.where('user', '=', user)
 			.where('locker', '=', locker)
 			.executeTakeFirstOrThrow();
 
-		if (count === 0) {
+		if (+count === 0) {
 			return error(403, { message: 'You do not own this locker' });
 		}
 

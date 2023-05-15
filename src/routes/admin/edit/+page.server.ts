@@ -3,7 +3,6 @@ import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { db } from '$lib/db';
-import { sql } from 'kysely';
 
 const formSchema = z.object({
 	name: z.string(),
@@ -46,16 +45,11 @@ export const actions: Actions = {
 		}
 
 		const result = await db.transaction().execute(async (trx) => {
-			await trx
-				.insertInto('user')
-				.onConflict((c) => c.doNothing())
-				.columns(['email'])
-				.values({ email })
-				.execute();
+			await trx.insertInto('user').ignore().columns(['email']).values({ email }).execute();
 
 			const result = await trx
 				.updateTable('registration')
-				.set({ user: email, name, expiry: sql`datetime(${expiry.toISOString()})` })
+				.set({ user: email, name, expiry })
 				.where('locker', '=', locker)
 				.executeTakeFirst();
 

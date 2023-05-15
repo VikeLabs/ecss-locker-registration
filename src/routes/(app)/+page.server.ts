@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import sqlite3 from 'better-sqlite3';
 import { z } from 'zod';
 import { message, setError, setMessage, superValidate } from 'sveltekit-superforms/server';
 import { db } from '$lib/db';
@@ -16,6 +15,7 @@ const formSchema = z.object({
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(formSchema);
+	// TODO return a list of available lockers for autocomplete
 	return { form };
 };
 
@@ -28,25 +28,21 @@ export const actions: Actions = {
 		const { email, locker, name } = form.data;
 
 		const result = await db.transaction().execute(async (trx) => {
-			await trx
-				.insertInto('user')
-				.onConflict((c) => c.doNothing())
-				.values({ email })
-				.execute();
+			// TODO this could be merged into a subquery with coalesce
 			const { registered } = await trx
 				.selectFrom('registration')
-				.select(db.fn.countAll<number>().as('registered'))
+				.select(db.fn.countAll<string>().as('registered'))
 				.where('user', '=', email)
 				.executeTakeFirstOrThrow();
-			if (registered + 1 > MAX_REGISTERED) {
+			if (+registered + 1 > MAX_REGISTERED) {
 				return 'limit-exceeded';
 			}
 			const { lockers } = await trx
 				.selectFrom('registration')
-				.select(db.fn.countAll<number>().as('lockers'))
+				.select(db.fn.countAll<string>().as('lockers'))
 				.where('locker', '=', locker)
 				.executeTakeFirstOrThrow();
-			if (lockers > 0) {
+			if (+lockers > 0) {
 				return 'locker-taken';
 			}
 			return 'ok';
@@ -66,6 +62,5 @@ export const actions: Actions = {
 		}
 		const msg = 'Almost done! Check your email for a link to finish registering.';
 		return message(form, { msg });
-		// throw redirect(302, `/flash?msg=${msg}`);
 	}
 };

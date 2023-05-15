@@ -40,7 +40,7 @@
 					Status
 					<img class="filter" alt="filter" src={filterSVG} />
 				</button>
-				<div class="absolute text-left left-0 right-0" class:hidden={showStatusFilter}>
+				<div class="absolute text-left left-0 right-0" class:hidden={!showStatusFilter}>
 					<div class="relative bg-neutral-200 border border-black w-full p-1 top-1">
 						{#each statuses as status}
 							<div>

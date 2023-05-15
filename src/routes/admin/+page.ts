@@ -7,8 +7,8 @@ export const load: PageLoad = ({ data }) => {
 			status = 'available';
 			return { ...data, expiry: null, status };
 		} else {
-			const expiry = Date.parse(data.expiry ?? '');
-			if (expiry < Date.now()) {
+			const expiry = data.expiry;
+			if (expiry.valueOf() < Date.now()) {
 				status = 'expired';
 			}
 			return {

@@ -1,15 +1,10 @@
-import { Kysely, SqliteDialect } from 'kysely';
-import sqlite3 from 'better-sqlite3';
+import { Kysely } from 'kysely';
 import type { DB } from 'kysely-codegen/dist/db.d.ts';
-import { env } from '$env/dynamic/private';
-
-const { DATABASE_URL } = env;
-if (DATABASE_URL === undefined) {
-	throw new Error('DATABASE_URL is undefined');
-}
+import { DATABASE_URL } from '$env/static/private';
+import { PlanetScaleDialect } from 'kysely-planetscale';
 
 export const db = new Kysely<DB>({
-	dialect: new SqliteDialect({
-		database: async () => sqlite3(DATABASE_URL)
+	dialect: new PlanetScaleDialect({
+		url: DATABASE_URL
 	})
 });

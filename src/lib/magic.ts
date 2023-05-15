@@ -1,4 +1,3 @@
-import { base } from '$app/paths';
 import { env } from '$env/dynamic/private';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
