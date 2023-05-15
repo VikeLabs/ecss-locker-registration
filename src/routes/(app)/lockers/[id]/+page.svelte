@@ -47,9 +47,6 @@
 	.status {
 		@apply font-bold text-sm p-1 rounded;
 	}
-	.grey {
-		@apply text-neutral-800 bg-neutral-200;
-	}
 	.green {
 		@apply text-green-800 bg-green-200;
 	}
