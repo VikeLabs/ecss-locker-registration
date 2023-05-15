@@ -4,11 +4,14 @@ import { authorize as adminAuthorize } from './routes/admin/auth.server';
 import { authorize as userAuthorize } from '$lib/auth.server';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (event.url.pathname.startsWith(`${base}/admin`) && !adminAuthorize(event.cookies).authorized) {
+	if (
+		event.url.pathname.startsWith(`${base}/admin`) &&
+		!(await adminAuthorize(event.cookies)).authorized
+	) {
 		return text('Please contact the Director of IT to gain access.', { status: 401 });
 	} else if (
 		event.url.pathname.startsWith(`${base}/lockers`) &&
-		!userAuthorize(event.cookies).authorized
+		!(await userAuthorize(event.cookies)).authorized
 	) {
 		return new Response("You're not logged in", {
 			status: 301,

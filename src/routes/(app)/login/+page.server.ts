@@ -48,7 +48,7 @@ export const actions: Actions = {
 
 async function secretAdminLogin(formData: FormData, cookies: Cookies) {
 	if (formData.get('email') === getAdminPassword()) {
-		adminLogin(cookies);
+		await adminLogin(cookies);
 		throw redirect(302, '/admin');
 	}
 }

@@ -28,9 +28,10 @@ export const actions: Actions = {
 		}
 		const resp = await fetch('/admin/api/lockers', {
 			method: 'POST',
-			body: JSON.stringify([form.data])
+			body: JSON.stringify(form.data)
 		});
-		const { err } = await resp.json();
+		const body = await resp.json();
+		const { err } = body;
 		if (err === 'locker-taken') {
 			return setError(form, 'locker', 'This locker is taken, please register another');
 		}

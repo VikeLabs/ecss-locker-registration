@@ -17,7 +17,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		locker: z.string(),
 		name: z.string(),
 		email: z.string().email(),
-		expiry: z.date()
+		expiry: z.coerce.date()
 	});
 	const parsed = schema.safeParse(await request.json());
 	if (!parsed.success) {

@@ -1,14 +1,14 @@
-import jwt from 'jsonwebtoken';
-import { env } from '$env/dynamic/private';
+import { JWT_SECRET } from '$env/static/private';
 import { error, type Cookies } from '@sveltejs/kit';
+import { SignJWT, jwtVerify } from 'jose';
 
 const cookieName = 'admin';
 
-const secret = env.JWT_SECRET;
+const secret = new TextEncoder().encode(JWT_SECRET);
 const algo = 'HS256';
 
-export function login(cookies: Cookies) {
-	const token = jwt.sign('nothing lol', secret, { algorithm: algo });
+export async function login(cookies: Cookies) {
+	const token = await new SignJWT({}).setProtectedHeader({ alg: algo }).sign(secret);
 	cookies.set(cookieName, token, { path: '/' });
 }
 
@@ -24,13 +24,13 @@ export type AuthResult =
 			authorized: true;
 	  };
 
-export function authorize(cookies: Cookies): AuthResult {
+export async function authorize(cookies: Cookies): Promise<AuthResult> {
 	const token = cookies.get(cookieName);
 	if (!token) {
 		return { authorized: false };
 	}
 	try {
-		jwt.verify(token, secret, { algorithms: [algo] });
+		await jwtVerify(token, secret, { algorithms: [algo] });
 		return {
 			authorized: true
 		};
@@ -38,8 +38,8 @@ export function authorize(cookies: Cookies): AuthResult {
 		return { authorized: false };
 	}
 }
-export function mustAuthorize(cookies: Cookies) {
-	const auth = authorize(cookies);
+export async function mustAuthorize(cookies: Cookies) {
+	const auth = await authorize(cookies);
 	if (!auth.authorized) {
 		throw error(401);
 	}

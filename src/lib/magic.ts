@@ -1,5 +1,5 @@
-import { env } from '$env/dynamic/private';
-import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '$env/static/private';
+import { jwtVerify, SignJWT } from 'jose';
 import { z } from 'zod';
 
 const magicDataSchema = z.union([
@@ -22,13 +22,17 @@ const magicDataSchema = z.union([
 
 export type MagicData = z.infer<typeof magicDataSchema>;
 
-const secret = env.JWT_SECRET;
+const secret = new TextEncoder().encode(JWT_SECRET);
 const algo = 'HS256';
 
-export function makeMagicToken(data: MagicData) {
-	return jwt.sign(data, secret, { algorithm: algo, expiresIn: '1d' });
+export async function makeMagicToken(data: MagicData): Promise<string> {
+	return await new SignJWT(data)
+		.setExpirationTime('1d')
+		.setProtectedHeader({ alg: algo })
+		.setIssuedAt()
+		.sign(secret);
 }
 
-export function parseMagicToken(token: string): MagicData {
-	return magicDataSchema.parse(jwt.verify(token, secret, { algorithms: [algo] }));
+export async function parseMagicToken(token: string): Promise<MagicData> {
+	return magicDataSchema.parse((await jwtVerify(token, secret, { algorithms: [algo] })).payload);
 }

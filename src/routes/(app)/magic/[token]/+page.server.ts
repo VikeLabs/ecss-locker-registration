@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
 	if (!params.token) {
 		return json({ message: 'Missing token' }, { status: 400 });
 	}
-	const data = parseMagicToken(params.token);
+	const data = await parseMagicToken(params.token);
 	if (data.type === 'register') {
 		const { user, locker, name } = data;
 		await db
@@ -23,10 +23,10 @@ export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
 				expiry: defaultExpiry()
 			})
 			.executeTakeFirstOrThrow();
-		login(data, cookies);
+		await login(data, cookies);
 		throw redirect(302, `${base}/lockers`);
 	} else if (data.type === 'login') {
-		login(data, cookies);
+		await login(data, cookies);
 		throw redirect(302, `${base}/lockers`);
 	} else if (data.type === 'transfer') {
 		const { user, locker } = data;

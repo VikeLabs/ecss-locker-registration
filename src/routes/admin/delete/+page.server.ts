@@ -1,9 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { z } from 'zod';
-import { setError, setMessage, superValidate } from 'sveltekit-superforms/server';
-import { db } from '$lib/db';
-import { sql } from 'kysely';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 
 const formSchema = z.object({
 	locker: z.string()

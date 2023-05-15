@@ -1,10 +1,8 @@
 import { redirect, error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import sqlite3 from 'better-sqlite3';
 import { mustAuthorize } from '$lib/auth.server';
 import { db } from '$lib/db';
 import { defaultExpiry } from '$lib/date';
-import { sql } from 'kysely';
 
 export type LockerStatus = 'expired' | 'available' | 'claimed';
 export type Locker = {
@@ -14,7 +12,7 @@ export type Locker = {
 };
 
 export const load: PageServerLoad<Locker> = async ({ params, cookies }) => {
-	const { user } = mustAuthorize(cookies);
+	const { user } = await mustAuthorize(cookies);
 	const locker = params.id;
 
 	const result = await db
@@ -39,7 +37,7 @@ export const load: PageServerLoad<Locker> = async ({ params, cookies }) => {
 
 export const actions: Actions = {
 	renew: async ({ params, cookies }) => {
-		const { user } = mustAuthorize(cookies);
+		const { user } = await mustAuthorize(cookies);
 		const locker = params.id;
 		db.updateTable('registration')
 			.set({ expiry: defaultExpiry() })

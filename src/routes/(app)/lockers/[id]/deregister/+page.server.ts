@@ -6,7 +6,7 @@ import { base } from '$app/paths';
 
 export const actions: Actions = {
 	default: async ({ params, cookies }) => {
-		const { user } = mustAuthorize(cookies);
+		const { user } = await mustAuthorize(cookies);
 		// don't tell the user if this fails, only happens if people mess with the API and they dont deserve errors
 		const hasLockers = await db.transaction().execute(async (trx) => {
 			await trx

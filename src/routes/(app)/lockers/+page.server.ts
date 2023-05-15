@@ -4,7 +4,7 @@ import { logout, mustAuthorize } from '$lib/auth.server';
 import { db } from '$lib/db';
 
 export const load: PageServerLoad = async ({ cookies }) => {
-	const { user } = mustAuthorize(cookies);
+	const { user } = await mustAuthorize(cookies);
 
 	const result = await db
 		.selectFrom('registration')

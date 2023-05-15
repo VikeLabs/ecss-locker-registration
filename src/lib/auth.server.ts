@@ -1,11 +1,11 @@
-import jwt from 'jsonwebtoken';
-import { env } from '$env/dynamic/private';
+import { SignJWT, jwtVerify } from 'jose';
+import { JWT_SECRET } from '$env/static/private';
 import { error, type Cookies } from '@sveltejs/kit';
 import { z } from 'zod';
 
 const cookieName = 'auth';
 
-const secret = env.JWT_SECRET;
+const secret = new TextEncoder().encode(JWT_SECRET);
 const algo = 'HS256';
 
 const AuthDataSchema = z.object({
@@ -13,16 +13,20 @@ const AuthDataSchema = z.object({
 });
 export type AuthData = z.infer<typeof AuthDataSchema>;
 
-function makeToken(data: AuthData) {
-	return jwt.sign(data, secret, { algorithm: algo, expiresIn: '1d' });
+async function makeToken(data: AuthData) {
+	return await new SignJWT(data)
+		.setExpirationTime('1d')
+		.setProtectedHeader({ alg: algo })
+		.setIssuedAt()
+		.sign(secret);
 }
 
 export function loginCookie(data: AuthData) {
 	return `${cookieName}=${makeToken(data)}; Path=/`;
 }
 
-export function login(data: AuthData, cookies: Cookies) {
-	cookies.set(cookieName, makeToken(data), { path: '/' });
+export async function login(data: AuthData, cookies: Cookies) {
+	cookies.set(cookieName, await makeToken(data), { path: '/' });
 }
 
 export function logout(cookies: Cookies) {
@@ -37,13 +41,13 @@ export type AuthResult =
 			authorized: true;
 	  } & AuthData);
 
-export function authorize(cookies: Cookies): AuthResult {
+export async function authorize(cookies: Cookies): Promise<AuthResult> {
 	const token = cookies.get(cookieName);
 	if (!token) {
 		return { authorized: false };
 	}
 	try {
-		const jsonData = jwt.verify(token, secret, { algorithms: [algo] });
+		const jsonData = (await jwtVerify(token, secret, { algorithms: [algo] })).payload;
 		return {
 			...AuthDataSchema.parse(jsonData),
 			authorized: true
@@ -52,8 +56,8 @@ export function authorize(cookies: Cookies): AuthResult {
 		return { authorized: false };
 	}
 }
-export function mustAuthorize(cookies: Cookies): AuthData {
-	const auth = authorize(cookies);
+export async function mustAuthorize(cookies: Cookies): Promise<AuthData> {
+	const auth = await authorize(cookies);
 	if (!auth.authorized) {
 		throw error(401);
 	}
