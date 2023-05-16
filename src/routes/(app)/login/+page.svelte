@@ -21,8 +21,9 @@
     <Flash {...$message} />
   {/if}
   <form method="post" use:enhance>
+    <!-- type is text to allow secret admin login -->
     <Input
-      type="email"
+      type="text"
       label="Email"
       id="email"
       name="email"
