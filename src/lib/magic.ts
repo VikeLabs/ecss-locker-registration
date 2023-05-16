@@ -1,4 +1,4 @@
-import { JWT_SECRET } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { jwtVerify, SignJWT } from "jose";
 import { z } from "zod";
 
@@ -22,7 +22,10 @@ const magicDataSchema = z.union([
 
 export type MagicData = z.infer<typeof magicDataSchema>;
 
-const secret = new TextEncoder().encode(JWT_SECRET);
+if (!env.JWT_SECRET) {
+  throw Error("JWT_SECRET undefined");
+}
+const secret = new TextEncoder().encode(env.JWT_SECRET);
 const algo = "HS256";
 
 export async function makeMagicToken(data: MagicData): Promise<string> {

@@ -1,10 +1,13 @@
-import { JWT_SECRET } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { error, type Cookies } from "@sveltejs/kit";
 import { SignJWT, jwtVerify } from "jose";
 
 const cookieName = "admin";
 
-const secret = new TextEncoder().encode(JWT_SECRET);
+if (!env.JWT_SECRET) {
+  throw Error("JWT_SECRET undefined");
+}
+const secret = new TextEncoder().encode(env.JWT_SECRET);
 const algo = "HS256";
 
 export async function login(cookies: Cookies) {

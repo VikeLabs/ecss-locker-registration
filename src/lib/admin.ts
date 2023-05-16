@@ -1,6 +1,6 @@
-import { ADMIN_PASSWORD } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
-let password: string = ADMIN_PASSWORD;
+let password: string = env.ADMIN_PASSWORD;
 if (!password) {
   throw Error("ADMIN_PASSWORD undefined");
 }

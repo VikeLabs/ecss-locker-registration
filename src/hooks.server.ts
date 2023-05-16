@@ -2,6 +2,7 @@ import { base } from "$app/paths";
 import { text, type Handle } from "@sveltejs/kit";
 import { authorize as adminAuthorize } from "./routes/admin/auth.server";
 import { authorize as userAuthorize } from "$lib/auth.server";
+import { setOrigin } from "$lib/email";
 
 export const handle: Handle = async ({ event, resolve }) => {
   if (
@@ -20,5 +21,6 @@ export const handle: Handle = async ({ event, resolve }) => {
       headers: { location: `${base}/login` },
     });
   }
+  setOrigin(event.url.origin);
   return resolve(event);
 };

@@ -1,12 +1,14 @@
 import { base } from "$app/paths";
-import { URL_PREFIX } from "$env/static/private";
 import { makeMagicToken } from "./magic";
 
-const prefix = URL_PREFIX;
-const urlBase = prefix + base;
+let prefix = "";
+// called from src/hooks.server.ts on every request (hopefully)
+export function setOrigin(url: string) {
+  prefix = url;
+}
 
 function makeLink(path: string) {
-  return new URL(path, urlBase);
+  return new URL(path, prefix + base);
 }
 
 function makeMagicLink(token: string) {
