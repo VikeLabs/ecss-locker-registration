@@ -9,7 +9,7 @@ import { sql } from "kysely";
 const MAX_REGISTERED = 1;
 
 const formSchema = z.object({
-  name: z.string(),
+  name: z.string().nonempty(),
   email: z.string().email(),
   locker: z.string(),
 });
@@ -44,6 +44,14 @@ export const actions: Actions = {
     const { email, locker, name } = form.data;
 
     const result = await db.transaction().execute(async (trx) => {
+      const { lockerExists } = await trx
+        .selectFrom("locker")
+        .select(db.fn.countAll<string>().as("lockerExists"))
+        .where("id", "=", locker)
+        .executeTakeFirstOrThrow();
+      if (+lockerExists === 0) {
+        return "locker-does-not-exist";
+      }
       // TODO this could be merged into a subquery with coalesce
       const { registered } = await trx
         .selectFrom("registration")
@@ -65,6 +73,8 @@ export const actions: Actions = {
     });
 
     switch (result) {
+      case "locker-does-not-exist":
+        return setError(form, "locker", "This locker does not exist");
       case "locker-taken":
         return setError(
           form,

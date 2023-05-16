@@ -9,7 +9,16 @@
 
   export let data: PageData;
   const { form, delayed, enhance, errors, constraints, message } = superForm(
-    data.form
+    data.form,
+    {
+      validators: {
+        locker: (value) => {
+          if (!data.availableLockers.includes(value)) {
+            return "Locker is not available";
+          }
+        },
+      },
+    }
   );
 
   const logoSize = "6rem";
