@@ -4,6 +4,7 @@ import { z } from "zod";
 import { message, setError, superValidate } from "sveltekit-superforms/server";
 import { db } from "$lib/db";
 import { sendRegisterEmail } from "$lib/email";
+import { sql } from "kysely";
 
 const MAX_REGISTERED = 1;
 
@@ -14,9 +15,24 @@ const formSchema = z.object({
 });
 
 export const load: PageServerLoad = async () => {
+  const availableLockers = (
+    await db
+      .selectFrom("locker")
+      .select(["id as locker"])
+      .where(({ not, exists, selectFrom }) =>
+        not(
+          exists(
+            selectFrom("registration")
+              .select(() => sql`1`.as("one"))
+              .whereRef("registration.locker", "=", "locker.id")
+          )
+        )
+      )
+      .execute()
+  ).map((row) => row.locker);
+
   const form = await superValidate(formSchema);
-  // TODO return a list of available lockers for autocomplete
-  return { form };
+  return { form, availableLockers };
 };
 
 export const actions: Actions = {

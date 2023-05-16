@@ -43,10 +43,16 @@
       label="Locker Number"
       id="locker"
       name="locker"
+      list="available-lockers"
       bind:value={$form.locker}
       errors={$errors.locker}
       {...$constraints.locker}
     />
+    <datalist id="available-lockers">
+      {#each data.availableLockers as locker}
+        <option value={locker} />
+      {/each}
+    </datalist>
     <Button loading={$delayed}>Register</Button>
   </form>
   <footer>
