@@ -1,12 +1,11 @@
 <script lang="ts">
   import Title from "$lib/components/Title.svelte";
   import Button from "$lib/components/Button.svelte";
-  import TextInput from "$lib/components/TextInput.svelte";
+  import Input from "$lib/components/Input.svelte";
   import type { PageData } from "./$types";
   import { superForm } from "$lib/form.client";
   import Back from "$lib/components/Back.svelte";
   import { dateProxy } from "sveltekit-superforms/client";
-  import DateInput from "$lib/components/DateInput.svelte";
 
   export let data: PageData;
   const { form, delayed, enhance, errors, constraints } = superForm(data.form);
@@ -18,7 +17,8 @@
 <Title />
 <main>
   <form method="post" use:enhance>
-    <TextInput
+    <Input
+      type="text"
       label="Name or Club"
       id="name"
       name="name"
@@ -26,7 +26,8 @@
       errors={$errors.name}
       {...$constraints.name}
     />
-    <TextInput
+    <Input
+      type="text"
       label="Email"
       id="email"
       name="email"
@@ -34,7 +35,8 @@
       errors={$errors.email}
       {...$constraints.email}
     />
-    <TextInput
+    <Input
+      type="text"
       label="Locker Number"
       id="locker"
       name="locker"
@@ -43,7 +45,8 @@
       disabled
       {...$constraints.locker}
     />
-    <DateInput
+    <Input
+      type="date"
       label="Expiry"
       id="expiry"
       name="expiry"

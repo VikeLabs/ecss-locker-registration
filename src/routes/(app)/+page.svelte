@@ -2,7 +2,7 @@
   import Title from "$lib/components/Title.svelte";
   import Button from "$lib/components/Button.svelte";
   import Logo from "$lib/components/Logo.svelte";
-  import TextInput from "$lib/components/TextInput.svelte";
+  import Input from "$lib/components/Input.svelte";
   import type { PageData } from "./$types";
   import { superForm } from "$lib/form.client";
   import Flash from "$lib/components/Flash.svelte";
@@ -32,7 +32,8 @@
     <Flash {...$message} />
   {/if}
   <form method="post" use:enhance>
-    <TextInput
+    <Input
+      type="text"
       label="Name or Club"
       id="name"
       name="name"
@@ -40,7 +41,8 @@
       errors={$errors.name}
       {...$constraints.name}
     />
-    <TextInput
+    <Input
+      type="email"
       label="Email"
       id="email"
       name="email"
@@ -48,7 +50,8 @@
       errors={$errors.email}
       {...$constraints.email}
     />
-    <TextInput
+    <Input
+      type="text"
       label="Locker Number"
       id="locker"
       name="locker"

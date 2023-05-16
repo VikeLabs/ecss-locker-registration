@@ -2,7 +2,7 @@
   import Title from "$lib/components/Title.svelte";
   import Button from "$lib/components/Button.svelte";
   import Logo from "$lib/components/Logo.svelte";
-  import TextInput from "$lib/components/TextInput.svelte";
+  import Input from "$lib/components/Input.svelte";
   import { superForm } from "$lib/form.client";
   import type { PageData } from "./$types";
   import Flash from "$lib/components/Flash.svelte";
@@ -21,7 +21,8 @@
     <Flash {...$message} />
   {/if}
   <form method="post" use:enhance>
-    <TextInput
+    <Input
+      type="email"
       label="Email"
       id="email"
       name="email"

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Back from "$lib/components/Back.svelte";
   import Button from "$lib/components/Button.svelte";
-  import TextInput from "$lib/components/TextInput.svelte";
+  import Input from "$lib/components/Input.svelte";
 </script>
 
 <Back />
@@ -12,7 +12,7 @@
     expire and it will have to be resent.
   </p>
   <form method="post">
-    <TextInput label="Email" id="email" name="email" />
+    <Input type="email" label="Email" id="email" name="email" />
     <Button>Transfer</Button>
   </form>
 </main>

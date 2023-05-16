@@ -1,7 +1,7 @@
 <script lang="ts">
   import Title from "$lib/components/Title.svelte";
   import Button from "$lib/components/Button.svelte";
-  import TextInput from "$lib/components/TextInput.svelte";
+  import Input from "$lib/components/Input.svelte";
   import type { PageData } from "./$types";
   import { superForm } from "$lib/form.client";
   import Back from "$lib/components/Back.svelte";
@@ -15,7 +15,8 @@
 <Title />
 <main>
   <form method="post" use:enhance>
-    <TextInput
+    <Input
+      type="text"
       label="Locker Number"
       id="locker"
       name="locker"
