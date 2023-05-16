@@ -2,13 +2,7 @@ import { fail, redirect, type Cookies } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
 
-import {
-  message,
-  setError,
-  setMessage,
-  superValidate,
-} from "sveltekit-superforms/server";
-import { login } from "$lib/auth.server";
+import { message, superValidate } from "sveltekit-superforms/server";
 import { login as adminLogin } from "../../admin/auth.server";
 import { db } from "$lib/db";
 import { getAdminPassword } from "$lib/admin";

@@ -2,7 +2,6 @@ import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
 import { setError, superValidate } from "sveltekit-superforms/server";
-import { db } from "$lib/db";
 import { defaultExpiry } from "$lib/date";
 
 const formSchema = z.object({

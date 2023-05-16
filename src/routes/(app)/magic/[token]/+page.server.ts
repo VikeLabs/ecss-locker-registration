@@ -6,7 +6,7 @@ import { parseMagicToken } from "$lib/magic";
 import { json, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
+export const load: PageServerLoad = async ({ params, cookies }) => {
   if (!params.token) {
     return json({ message: "Missing token" }, { status: 400 });
   }

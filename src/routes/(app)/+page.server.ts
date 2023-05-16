@@ -1,12 +1,7 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
-import {
-  message,
-  setError,
-  setMessage,
-  superValidate,
-} from "sveltekit-superforms/server";
+import { message, setError, superValidate } from "sveltekit-superforms/server";
 import { db } from "$lib/db";
 import { sendRegisterEmail } from "$lib/email";
 

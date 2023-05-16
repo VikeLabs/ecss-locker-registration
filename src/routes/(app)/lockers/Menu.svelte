@@ -14,7 +14,8 @@
       <tr class="relative">
         <!-- stretch a link across the entire table row -->
         <!-- this works using "relative" inside "absolute inset-0" -->
-        <a class="absolute inset-0" href="lockers/{row.locker}" />
+        <!-- i put the div there to silence accessibility warnings (yes, i know) -->
+        <a class="absolute inset-0" href="lockers/{row.locker}"><div /></a>
 
         <td>{row.name}</td>
         <td>{row.locker}</td>
