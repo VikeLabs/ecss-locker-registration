@@ -5,7 +5,7 @@
   export let data: PageData;
 </script>
 
-<Back />
 <main>
   <Flash {...data} />
 </main>
+<Back />

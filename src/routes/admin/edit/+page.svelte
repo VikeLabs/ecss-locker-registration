@@ -12,8 +12,6 @@
   const expiryDate = dateProxy(form, "expiry", { format: "date" });
 </script>
 
-<Back />
-
 <Title />
 <main>
   <form method="post" use:enhance>
@@ -57,6 +55,7 @@
     <Button loading={$delayed}>Edit</Button>
   </form>
 </main>
+<Back />
 
 <style lang="postcss">
 </style>

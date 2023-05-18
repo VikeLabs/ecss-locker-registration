@@ -1,6 +1,10 @@
-<a href="./" on:click|preventDefault={() => history.back()}>
+<a
+  href="./"
+  on:click|preventDefault={() => history.back()}
+  class="absolute top-8 left-8 hover:cursor-pointer"
+>
   <svg
-    class="h-8 w-8 absolute top-8 left-8 hover:cursor-pointer"
+    class="h-8 w-8"
     height="21"
     viewBox="0 0 21 21"
     width="21"

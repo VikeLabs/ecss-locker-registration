@@ -10,8 +10,6 @@
   const { form, delayed, enhance, errors, constraints } = superForm(data.form);
 </script>
 
-<Back />
-
 <Title />
 <main>
   <form method="post" use:enhance>
@@ -28,6 +26,7 @@
     <Button loading={$delayed}>Delete</Button>
   </form>
 </main>
+<Back />
 
 <style lang="postcss">
 </style>

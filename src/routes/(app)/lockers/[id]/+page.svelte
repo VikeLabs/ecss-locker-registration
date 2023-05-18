@@ -8,7 +8,6 @@
   let renewLoading = false;
 </script>
 
-<Back />
 <main>
   <h1>Locker {data.locker}</h1>
   <div>
@@ -44,6 +43,7 @@
     <a href="{data.locker}/deregister"><Button>Deregister locker</Button></a>
   </div>
 </main>
+<Back />
 
 <style lang="postcss">
   .status {

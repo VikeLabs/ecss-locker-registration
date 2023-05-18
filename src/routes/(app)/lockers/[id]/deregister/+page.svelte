@@ -3,7 +3,6 @@
   import Button from "$lib/components/Button.svelte";
 </script>
 
-<Back />
 <main>
   <h1>Deregister locker</h1>
   <p class="text-center">
@@ -14,3 +13,4 @@
     <Button>Deregister</Button>
   </form>
 </main>
+<Back />

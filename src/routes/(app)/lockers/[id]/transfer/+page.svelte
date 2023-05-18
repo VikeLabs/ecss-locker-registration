@@ -4,7 +4,6 @@
   import Input from "$lib/components/Input.svelte";
 </script>
 
-<Back />
 <main>
   <h1>Transfer locker</h1>
   <p>
@@ -16,3 +15,4 @@
     <Button>Transfer</Button>
   </form>
 </main>
+<Back />
