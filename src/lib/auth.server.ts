@@ -5,9 +5,6 @@ import { z } from "zod";
 
 const cookieName = "auth";
 
-if (!env.JWT_SECRET) {
-  throw Error("JWT_SECRET undefined");
-}
 const secret = new TextEncoder().encode(env.JWT_SECRET);
 const algo = "HS256";
 

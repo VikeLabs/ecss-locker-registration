@@ -1,10 +1,11 @@
 import { env } from "$env/dynamic/private";
 
-let password: string = env.ADMIN_PASSWORD;
-if (!password) {
-  throw Error("ADMIN_PASSWORD undefined");
-}
+let password: string | undefined = env.ADMIN_PASSWORD;
+
 export function getAdminPassword() {
+  if (!password) {
+    throw Error("ADMIN_PASSWORD undefined");
+  }
   return password;
 }
 

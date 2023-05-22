@@ -22,9 +22,6 @@ const magicDataSchema = z.union([
 
 export type MagicData = z.infer<typeof magicDataSchema>;
 
-if (!env.JWT_SECRET) {
-  throw Error("JWT_SECRET undefined");
-}
 const secret = new TextEncoder().encode(env.JWT_SECRET);
 const algo = "HS256";
 

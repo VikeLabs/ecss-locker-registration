@@ -4,9 +4,6 @@ import { SignJWT, jwtVerify } from "jose";
 
 const cookieName = "admin";
 
-if (!env.JWT_SECRET) {
-  throw Error("JWT_SECRET undefined");
-}
 const secret = new TextEncoder().encode(env.JWT_SECRET);
 const algo = "HS256";
 
