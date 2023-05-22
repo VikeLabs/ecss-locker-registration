@@ -1,0 +1,12 @@
+.git
+.git*
+
+Dockerfile
+
+.env
+
+.svelte-kit
+build
+node_modules
+
+fly.toml
