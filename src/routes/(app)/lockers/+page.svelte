@@ -1,10 +1,9 @@
 <script lang="ts">
   import Menu from "./Menu.svelte";
   import Button from "$lib/components/Button.svelte";
-  import type { PageData } from "./$types";
   import { enhance } from "$app/forms";
 
-  export let data: PageData;
+  export let data;
 
   let logoutLoading = false;
 </script>

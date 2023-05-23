@@ -1,6 +1,4 @@
-import type { PageLoad } from "./$types";
-
-export const load: PageLoad<{ msg: string }> = ({ url }) => {
+export async function load({ url }) {
   const msg = url.searchParams.get("msg") ?? "";
   return { msg };
-};
+}

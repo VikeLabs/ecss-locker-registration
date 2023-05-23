@@ -1,9 +1,8 @@
 <script lang="ts">
   import { invalidate } from "$app/navigation";
-  import type { PageData } from "./$types";
   import filterSVG from "./filter.svg";
 
-  export let data: PageData;
+  export let data;
 
   let checked: {
     [k: string]: boolean;

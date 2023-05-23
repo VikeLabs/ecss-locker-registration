@@ -2,9 +2,8 @@
   import { enhance } from "$app/forms";
   import Back from "$lib/components/Back.svelte";
   import Button from "$lib/components/Button.svelte";
-  import type { PageData } from "./$types";
 
-  export let data: PageData;
+  export let data;
   let renewLoading = false;
 </script>
 

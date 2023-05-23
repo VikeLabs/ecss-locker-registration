@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { PageLoad } from "./$types";
 
 const schema = z.array(
   z.union([
@@ -18,7 +17,7 @@ const schema = z.array(
   ])
 );
 
-export const load: PageLoad = async ({ fetch }) => {
+export async function load({ fetch }) {
   const resp = await fetch("/admin/api/lockers");
   const data = schema.parse(await resp.json());
   const registration = data.map((data) => {
@@ -40,4 +39,4 @@ export const load: PageLoad = async ({ fetch }) => {
   });
 
   return { registration };
-};
+}

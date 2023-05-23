@@ -1,5 +1,4 @@
 import { db } from "$lib/db";
-import type { RequestHandler } from "./$types";
 import { defaultExpiry } from "$lib/date";
 import { z } from "zod";
 
@@ -7,7 +6,7 @@ const schema = z.object({
   locker: z.string(),
 });
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST = async ({ request }) => {
   const parsed = schema.safeParse(await request.json());
   if (!parsed.success) {
     return new Response("Missing locker", { status: 400 });

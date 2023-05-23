@@ -1,5 +1,4 @@
 import { fail, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
 import { setError, superValidate } from "sveltekit-superforms/server";
 
@@ -7,14 +6,14 @@ const formSchema = z.object({
   locker: z.string(),
 });
 
-export const load: PageServerLoad = async ({ request }) => {
+export async function load({ request }) {
   const form = await superValidate(formSchema);
   const url = new URL(request.url);
   form.data.locker = url.searchParams.get("locker") ?? "";
   return { form };
-};
+}
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ request, fetch }) => {
     const form = await superValidate(request, formSchema);
     if (!form.valid) {

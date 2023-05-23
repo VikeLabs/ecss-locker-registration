@@ -1,5 +1,4 @@
 import { error, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
 import { mustAuthorize } from "$lib/auth.server";
 import { sendTransferEmail } from "$lib/email";
 import { z } from "zod";
@@ -10,13 +9,13 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export async function load({ cookies }) {
   await mustAuthorize(cookies); // TODO remove after testing its not needed
   const form = await superValidate(formSchema);
   return { form };
-};
+}
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ params, cookies, request }) => {
     const { user } = await mustAuthorize(cookies); // TODO remove after testing its not needed
     const locker = params.id;

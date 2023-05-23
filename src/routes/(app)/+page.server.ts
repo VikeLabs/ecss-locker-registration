@@ -1,5 +1,4 @@
 import { fail } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
 import { message, setError, superValidate } from "sveltekit-superforms/server";
 import { db } from "$lib/db";
@@ -14,7 +13,7 @@ const formSchema = z.object({
   locker: z.string(),
 });
 
-export const load: PageServerLoad = async () => {
+export async function load() {
   const availableLockers = (
     await db
       .selectFrom("locker")
@@ -33,9 +32,9 @@ export const load: PageServerLoad = async () => {
 
   const form = await superValidate(formSchema);
   return { form, availableLockers };
-};
+}
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ request }) => {
     const form = await superValidate(request, formSchema);
     if (!form.valid) {

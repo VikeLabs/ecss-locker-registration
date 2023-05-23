@@ -4,9 +4,8 @@ import { defaultExpiry } from "$lib/date";
 import { db } from "$lib/db";
 import { parseMagicToken } from "$lib/magic";
 import { json, redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
+export async function load({ params, cookies }) {
   if (!params.token) {
     return json({ message: "Missing token" }, { status: 400 });
   }
@@ -39,4 +38,4 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     throw redirect(302, `${base}/lockers/${encodeURIComponent(locker)}`);
   }
   return {};
-};
+}

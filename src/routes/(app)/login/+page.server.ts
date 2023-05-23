@@ -1,5 +1,4 @@
 import { fail, redirect, type Cookies } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
 import { z } from "zod";
 
 import { message, superValidate } from "sveltekit-superforms/server";
@@ -12,12 +11,12 @@ const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
 });
 
-export const load: PageServerLoad = async () => {
+export async function load() {
   const form = await superValidate(formSchema);
   return { form };
-};
+}
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ request, cookies }) => {
     const formData = await request.formData();
     await secretAdminLogin(formData, cookies);

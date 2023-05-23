@@ -4,10 +4,9 @@
   import Logo from "$lib/components/Logo.svelte";
   import Input from "$lib/components/Input.svelte";
   import { superForm } from "$lib/form.client";
-  import type { PageData } from "./$types";
   import Flash from "$lib/components/Flash.svelte";
 
-  export let data: PageData;
+  export let data;
   const { form, delayed, enhance, errors, message } = superForm(data.form);
 
   const logoSize = "6rem";

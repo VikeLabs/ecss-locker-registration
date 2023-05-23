@@ -1,10 +1,9 @@
 import { redirect } from "@sveltejs/kit";
-import type { Actions } from "./$types";
 import { logout, mustAuthorize } from "$lib/auth.server";
 import { db } from "$lib/db";
 import { base } from "$app/paths";
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ params, cookies }) => {
     const { user } = await mustAuthorize(cookies);
     // don't tell the user if this fails, only happens if people mess with the API and they dont deserve errors

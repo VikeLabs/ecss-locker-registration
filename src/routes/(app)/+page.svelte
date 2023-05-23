@@ -3,11 +3,10 @@
   import Button from "$lib/components/Button.svelte";
   import Logo from "$lib/components/Logo.svelte";
   import Input from "$lib/components/Input.svelte";
-  import type { PageData } from "./$types";
   import { superForm } from "$lib/form.client";
   import Flash from "$lib/components/Flash.svelte";
 
-  export let data: PageData;
+  export let data;
   const { form, delayed, enhance, errors, constraints, message } = superForm(
     data.form,
     {

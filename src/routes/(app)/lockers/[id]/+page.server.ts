@@ -1,5 +1,4 @@
 import { redirect, error } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
 import { mustAuthorize } from "$lib/auth.server";
 import { db } from "$lib/db";
 import { defaultExpiry } from "$lib/date";
@@ -11,7 +10,7 @@ export type Locker = {
   status: LockerStatus;
 };
 
-export const load: PageServerLoad<Locker> = async ({ params, cookies }) => {
+export async function load({ params, cookies }) {
   const { user } = await mustAuthorize(cookies);
   const locker = params.id;
 
@@ -33,9 +32,9 @@ export const load: PageServerLoad<Locker> = async ({ params, cookies }) => {
   }
 
   return { name, locker, status };
-};
+}
 
-export const actions: Actions = {
+export const actions = {
   renew: async ({ params, cookies }) => {
     const { user } = await mustAuthorize(cookies);
     const locker = params.id;
