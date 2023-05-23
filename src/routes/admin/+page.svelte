@@ -91,8 +91,9 @@
           class:hidden={!showStatusFilter}
         >
           <div
-            class="relative bg-neutral-200 border border-black w-full p-1 top-1"
+            class="relative bg-neutral-200 border border-black p-1 top-1 w-[calc(100%+2px)] left-[-1px]"
           >
+            Filter status
             {#each statuses as status}
               <div>
                 <input
@@ -100,7 +101,17 @@
                   bind:checked={statusFilter[status]}
                   value={status}
                 />
-                {status}
+                <span
+                  on:click={() => {
+                    statusFilter[status] = !statusFilter[status];
+                  }}
+                  on:keypress={() => {
+                    statusFilter[status] = !statusFilter[status];
+                  }}
+                  class="cursor-pointer select-none font-normal"
+                >
+                  {status}
+                </span>
               </div>
             {/each}
           </div>
@@ -113,7 +124,7 @@
     </tr>
     {#each filteredData.registration as { locker, status, name, user, expiry } (locker)}
       <tr class={status} class:checked={checked[locker]}>
-        <td class="text-center">
+        <td class="text-center w-0">
           <div class="w-full h-full flex items-center justify-center">
             <input
               type="checkbox"
@@ -122,11 +133,11 @@
             />
           </div>
         </td>
-        <td>{locker}</td>
-        <td>{status}</td>
-        <td>{name}</td>
-        <td>{user}</td>
-        <td>{expiry?.toDateString() ?? null}</td>
+        <td>{locker ?? ""}</td>
+        <td>{status ?? ""}</td>
+        <td>{name ?? ""}</td>
+        <td>{user ?? ""}</td>
+        <td>{expiry?.toDateString() ?? ""}</td>
         <td>
           {#if status === "available"}
             <a href="admin/register?locker={locker}"
@@ -148,6 +159,7 @@
 <style lang="postcss">
   .scrollable {
     overflow: scroll;
+    overflow-x: hidden;
     position: absolute;
     inset: 0;
   }
@@ -183,7 +195,7 @@
     @apply bg-red-100;
   }
   tr.checked {
-    @apply bg-blue-100;
+    @apply bg-sky-100;
   }
 
   .filter {
