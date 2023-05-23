@@ -3,6 +3,7 @@ import { superForm as defaultSuperForm } from "sveltekit-superforms/client";
 
 type Message = {
   msg: string;
+  type?: "info" | "success" | "warning" | "error";
 };
 
 export function superForm<T extends AnyZodObject>(
