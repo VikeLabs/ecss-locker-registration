@@ -4,7 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        "ess-orange": "#ff931e;",
+        ess: {
+          400: "#E88419",
+          500: "#ff931e",
+          600: "#de7a0f",
+        },
       },
       spacing: {
         logo: "6rem",

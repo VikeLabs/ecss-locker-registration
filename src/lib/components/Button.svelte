@@ -24,13 +24,15 @@
     border-color: transparent;
     border-radius: theme(borderRadius.lg);
     color: theme(colors.neutral.50);
-    background-color: theme(colors.ess-orange);
+    background-color: theme(colors.ess.500);
 
     font-weight: theme(fontWeight.bold);
     font-size: theme(fontSize.sm);
+
+    transition: background-color 0.2s ease-in-out;
   }
   button:hover {
-    cursor: pointer;
+    background-color: theme(colors.ess.400);
   }
   .compact {
     padding: theme(space.2) theme(space.4);
