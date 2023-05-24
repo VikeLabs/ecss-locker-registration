@@ -6,11 +6,8 @@
 <slot />
 
 <style lang="postcss">
-  :global(html) {
-    font-family: "Roboto", system-ui, sans-serif;
-  }
-
   :global(html, body) {
+    font-family: "Roboto", system-ui, sans-serif;
     margin: 0;
     height: 100%;
   }
