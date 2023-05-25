@@ -1,25 +1,9 @@
 <script lang="ts">
-  import "../../app.css";
   import "../../components.css";
 </script>
 
-<slot />
-
-<style lang="postcss">
-  :global(html, body) {
-    font-family: "Roboto", system-ui, sans-serif;
-    margin: 0;
-    height: 100%;
-  }
-
-  :global(body) {
-    background: theme(colors.neutral.100);
-    color: theme(colors.neutral.800);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
-</style>
+<div
+  class="m-0 box-border flex h-[100svh] w-full flex-col items-center justify-center bg-neutral-100 p-6 font-sans text-neutral-800"
+>
+  <slot />
+</div>

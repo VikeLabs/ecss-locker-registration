@@ -13,6 +13,9 @@ export default {
       spacing: {
         logo: "6rem",
       },
+      fontFamily: {
+        sans: ["Roboto", "sans-serif"],
+      },
     },
   },
   plugins: [],

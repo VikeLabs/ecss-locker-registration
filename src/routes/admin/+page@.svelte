@@ -61,7 +61,7 @@
   }
 </script>
 
-<div class="scrollable">
+<div>
   <h1 class="p-2 text-3xl font-semibold">Locker Registration Admin Panel</h1>
   <hr class="border-black" />
   <div class="p-2">
@@ -80,7 +80,7 @@
     <tr class="bg-neutral-200">
       <th />
       <th>Locker</th>
-      <th class="relative">
+      <th>
         <button on:click={() => (showStatusFilter = !showStatusFilter)}>
           Status
           <img class="filter" alt="filter" src={filterSVG} />
@@ -156,18 +156,10 @@
 </div>
 
 <style lang="postcss">
-  .scrollable {
-    overflow: scroll;
-    overflow-x: hidden;
-    position: absolute;
-    inset: 0;
-  }
-
   table {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    position: relative;
   }
   th {
     border-top: 1px black solid;
@@ -186,6 +178,7 @@
     @apply py-0.5;
   }
   tr.available {
+    @apply bg-neutral-100;
   }
   tr.claimed {
     @apply bg-green-100;
