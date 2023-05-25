@@ -62,7 +62,7 @@
 </script>
 
 <div class="scrollable">
-  <h1 class="text-3xl p-2 font-semibold">Locker Registration Admin Panel</h1>
+  <h1 class="p-2 text-3xl font-semibold">Locker Registration Admin Panel</h1>
   <hr class="border-black" />
   <div class="p-2">
     {#if Object.values(checked).some((checked) => !checked)}
@@ -86,11 +86,11 @@
           <img class="filter" alt="filter" src={filterSVG} />
         </button>
         <div
-          class="absolute text-left left-0 right-0"
+          class="absolute left-0 right-0 text-left"
           class:hidden={!showStatusFilter}
         >
           <div
-            class="relative bg-neutral-200 border border-black p-1 top-1 w-[calc(100%+2px)] left-[-1px]"
+            class="relative left-[-1px] top-1 w-[calc(100%+2px)] border border-black bg-neutral-200 p-1"
           >
             Filter status
             {#each statuses as status}
@@ -123,8 +123,8 @@
     </tr>
     {#each filteredData.registration as { locker, status, name, user, expiry } (locker)}
       <tr class={status} class:checked={checked[locker]}>
-        <td class="text-center w-0">
-          <div class="w-full h-full flex items-center justify-center">
+        <td class="w-0 text-center">
+          <div class="flex h-full w-full items-center justify-center">
             <input
               type="checkbox"
               bind:checked={checked[locker]}
@@ -206,7 +206,7 @@
   button {
     border: 1px theme(colors.neutral.500) solid;
     background: theme(colors.neutral.200);
-    @apply px-2 rounded;
+    @apply rounded px-2;
   }
   button:hover {
     background: theme(colors.neutral.300);

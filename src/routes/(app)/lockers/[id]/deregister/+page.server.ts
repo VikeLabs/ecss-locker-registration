@@ -1,7 +1,7 @@
+import { base } from "$app/paths";
 import { redirect } from "@sveltejs/kit";
 import { logout, mustAuthorize } from "$lib/auth.server";
 import { db } from "$lib/db";
-import { base } from "$app/paths";
 
 export const actions = {
   default: async ({ params, cookies }) => {

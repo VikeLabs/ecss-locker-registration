@@ -5,7 +5,7 @@
 <main>
   <h1>
     An
-    <span class="underline decoration-wavy decoration-red-500">error</span>
+    <span class="underline decoration-red-500 decoration-wavy">error</span>
     occurred
   </h1>
   <p>{$page.error?.message}</p>

@@ -1,6 +1,6 @@
-import { db } from "$lib/db";
-import { defaultExpiry } from "$lib/date";
 import { z } from "zod";
+import { defaultExpiry } from "$lib/date";
+import { db } from "$lib/db";
 
 const schema = z.object({
   locker: z.string(),

@@ -1,5 +1,6 @@
 <script lang="ts">
   import chevron from "./chevron_right.svg";
+
   export let rows: Row[];
 
   type Row = {
@@ -20,7 +21,7 @@
         <td>{row.name}</td>
         <td>{row.locker}</td>
         <td>
-          <img class="w-7 h-7 ml-auto" src={chevron} alt="Right chevron" />
+          <img class="ml-auto h-7 w-7" src={chevron} alt="Right chevron" />
         </td>
       </tr>
     {/each}
@@ -30,9 +31,9 @@
 <style lang="postcss">
   .wrapper {
     @apply w-full max-w-sm bg-neutral-50;
-    @apply border border-neutral-300 rounded-lg;
+    @apply rounded-lg border border-neutral-300;
     /* we round table by wrapping it in a rounded div and hiding overflow */
-    @apply overflow-hidden box-border;
+    @apply box-border overflow-hidden;
   }
   table {
     width: 100%;

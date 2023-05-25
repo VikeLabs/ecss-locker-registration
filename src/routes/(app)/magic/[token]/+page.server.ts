@@ -1,9 +1,9 @@
 import { base } from "$app/paths";
+import { json, redirect } from "@sveltejs/kit";
 import { login } from "$lib/auth.server";
 import { defaultExpiry } from "$lib/date";
 import { db } from "$lib/db";
 import { parseMagicToken } from "$lib/magic";
-import { json, redirect } from "@sveltejs/kit";
 
 export async function load({ params, cookies }) {
   if (!params.token) {

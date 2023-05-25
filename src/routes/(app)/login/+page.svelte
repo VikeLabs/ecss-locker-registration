@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Title from "$lib/components/Title.svelte";
   import Button from "$lib/components/Button.svelte";
-  import Logo from "$lib/components/Logo.svelte";
-  import Input from "$lib/components/Input.svelte";
-  import { superForm } from "$lib/form.client";
   import Flash from "$lib/components/Flash.svelte";
+  import Input from "$lib/components/Input.svelte";
+  import Logo from "$lib/components/Logo.svelte";
+  import Title from "$lib/components/Title.svelte";
+  import { superForm } from "$lib/form.client";
 
   export let data;
   const { form, delayed, enhance, errors, message } = superForm(data.form);

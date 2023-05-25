@@ -1,9 +1,9 @@
-import { fail } from "@sveltejs/kit";
-import { z } from "zod";
+import { sql } from "kysely";
 import { message, setError, superValidate } from "sveltekit-superforms/server";
+import { z } from "zod";
+import { fail } from "@sveltejs/kit";
 import { db } from "$lib/db";
 import { sendRegisterEmail } from "$lib/email";
-import { sql } from "kysely";
 
 const MAX_REGISTERED = 1;
 

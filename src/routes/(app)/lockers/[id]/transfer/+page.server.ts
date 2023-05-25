@@ -1,9 +1,9 @@
+import { superValidate } from "sveltekit-superforms/server";
+import { z } from "zod";
 import { error, redirect } from "@sveltejs/kit";
 import { mustAuthorize } from "$lib/auth.server";
-import { sendTransferEmail } from "$lib/email";
-import { z } from "zod";
-import { superValidate } from "sveltekit-superforms/server";
 import { db } from "$lib/db";
+import { sendTransferEmail } from "$lib/email";
 
 const formSchema = z.object({
   email: z.string().email(),

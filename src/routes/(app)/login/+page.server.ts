@@ -1,11 +1,10 @@
-import { fail, redirect, type Cookies } from "@sveltejs/kit";
-import { z } from "zod";
-
 import { message, superValidate } from "sveltekit-superforms/server";
-import { login as adminLogin } from "../../admin/auth.server";
-import { db } from "$lib/db";
+import { z } from "zod";
+import { fail, redirect, type Cookies } from "@sveltejs/kit";
 import { getAdminPassword } from "$lib/admin";
+import { db } from "$lib/db";
 import { sendLoginEmail } from "$lib/email";
+import { login as adminLogin } from "../../admin/auth.server";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),

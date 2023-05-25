@@ -1,7 +1,7 @@
 import { base } from "$app/paths";
-import { makeMagicToken } from "./magic";
 import { env } from "$env/dynamic/private";
 import { SMTPClient } from "emailjs";
+import { makeMagicToken } from "./magic";
 
 const client = new SMTPClient({
   host: "smtp.gmail.com",

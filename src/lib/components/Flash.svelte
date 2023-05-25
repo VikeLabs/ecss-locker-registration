@@ -1,8 +1,8 @@
 <script lang="ts">
+  import ErrorIcon from "./icons/Error.svelte";
   import Info from "./icons/Info.svelte";
   import Success from "./icons/Success.svelte";
   import Warning from "./icons/Warning.svelte";
-  import ErrorIcon from "./icons/Error.svelte";
 
   export let msg: string;
   export let type: "info" | "success" | "warning" | "error" = "info";
@@ -25,9 +25,9 @@
 
 <style lang="postcss">
   .container {
-    @apply p-3 w-full;
-    @apply text-base text-left;
-    @apply border rounded-lg;
+    @apply w-full p-3;
+    @apply text-left text-base;
+    @apply rounded-lg border;
     @apply flex items-center justify-start gap-3;
   }
   .info {

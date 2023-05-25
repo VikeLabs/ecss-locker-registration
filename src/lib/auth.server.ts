@@ -1,7 +1,7 @@
-import { SignJWT, jwtVerify } from "jose";
 import { env } from "$env/dynamic/private";
-import { error, type Cookies } from "@sveltejs/kit";
+import { SignJWT, jwtVerify } from "jose";
 import { z } from "zod";
+import { error, type Cookies } from "@sveltejs/kit";
 
 const cookieName = "auth";
 

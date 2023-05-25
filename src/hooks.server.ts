@@ -1,8 +1,8 @@
 import { base } from "$app/paths";
 import { text, type Handle } from "@sveltejs/kit";
-import { authorize as adminAuthorize } from "./routes/admin/auth.server";
 import { authorize as userAuthorize } from "$lib/auth.server";
 import { setOrigin } from "$lib/email";
+import { authorize as adminAuthorize } from "./routes/admin/auth.server";
 
 export const handle: Handle = async ({ event, resolve }) => {
   if (

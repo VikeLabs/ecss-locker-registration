@@ -1,8 +1,8 @@
-import { fail, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
-import { z } from "zod";
 import { setError, superValidate } from "sveltekit-superforms/server";
+import { z } from "zod";
+import { fail, redirect } from "@sveltejs/kit";
 import { db } from "$lib/db";
+import type { Actions, PageServerLoad } from "./$types";
 
 const formSchema = z.object({
   name: z.string(),

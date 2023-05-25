@@ -1,7 +1,7 @@
 import { redirect, error } from "@sveltejs/kit";
 import { mustAuthorize } from "$lib/auth.server";
-import { db } from "$lib/db";
 import { defaultExpiry } from "$lib/date";
+import { db } from "$lib/db";
 
 export type LockerStatus = "expired" | "available" | "claimed";
 export type Locker = {

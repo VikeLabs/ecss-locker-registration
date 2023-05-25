@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Title from "$lib/components/Title.svelte";
+  import { dateProxy } from "sveltekit-superforms/client";
+  import Back from "$lib/components/Back.svelte";
   import Button from "$lib/components/Button.svelte";
   import Input from "$lib/components/Input.svelte";
-  import type { PageData } from "./$types";
+  import Title from "$lib/components/Title.svelte";
   import { superForm } from "$lib/form.client";
-  import Back from "$lib/components/Back.svelte";
-  import { dateProxy } from "sveltekit-superforms/client";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
   const { form, delayed, enhance, errors, constraints } = superForm(data.form);

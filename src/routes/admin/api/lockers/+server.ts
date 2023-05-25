@@ -1,6 +1,6 @@
-import { db } from "$lib/db";
-import { json, type RequestHandler } from "@sveltejs/kit";
 import { z } from "zod";
+import { json, type RequestHandler } from "@sveltejs/kit";
+import { db } from "$lib/db";
 
 export const GET: RequestHandler = async () => {
   const result = await db

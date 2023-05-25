@@ -46,15 +46,15 @@
 
 <style lang="postcss">
   .status {
-    @apply font-bold text-sm p-1 rounded;
+    @apply rounded p-1 text-sm font-bold;
   }
   .green {
-    @apply text-green-800 bg-green-200;
+    @apply bg-green-200 text-green-800;
   }
   .red {
-    @apply text-red-800 bg-red-200;
+    @apply bg-red-200 text-red-800;
   }
   .buttons {
-    @apply flex flex-col gap-2 items-center;
+    @apply flex flex-col items-center gap-2;
   }
 </style>
