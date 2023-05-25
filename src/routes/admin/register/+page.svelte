@@ -5,9 +5,8 @@
   import Input from "$lib/components/Input.svelte";
   import Title from "$lib/components/Title.svelte";
   import { superForm } from "$lib/form.client";
-  import type { PageData } from "./$types";
 
-  export let data: PageData;
+  export let data;
   const { form, delayed, enhance, errors, constraints } = superForm(data.form);
   const expiryDate = dateProxy(form, "expiry", { format: "date" });
 </script>

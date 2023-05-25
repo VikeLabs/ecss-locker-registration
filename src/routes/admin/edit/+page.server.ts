@@ -2,7 +2,6 @@ import { setError, superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 import { fail, redirect } from "@sveltejs/kit";
 import { db } from "$lib/db";
-import type { Actions, PageServerLoad } from "./$types";
 
 const formSchema = z.object({
   name: z.string(),
@@ -11,7 +10,7 @@ const formSchema = z.object({
   expiry: z.date(),
 });
 
-export const load: PageServerLoad = async ({ request }) => {
+export async function load({ request }) {
   const form = await superValidate(formSchema);
   const url = new URL(request.url);
   const locker = url.searchParams.get("locker");
@@ -31,9 +30,9 @@ export const load: PageServerLoad = async ({ request }) => {
   form.data.name = lockerData.name;
   form.data.expiry = new Date(lockerData.expiry);
   return { form };
-};
+}
 
-export const actions: Actions = {
+export const actions = {
   default: async ({ request }) => {
     const form = await superValidate(request, formSchema);
     if (!form.valid) {

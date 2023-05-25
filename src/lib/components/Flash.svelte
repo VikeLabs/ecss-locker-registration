@@ -6,21 +6,23 @@
 
   export let msg: string;
   export let type: "info" | "success" | "warning" | "error" = "info";
-
-  const iconClass = "w-6 h-6 inline";
 </script>
 
 <div class="container {type}">
-  {#if type === "info"}
-    <Info class={iconClass} />
-  {:else if type === "success"}
-    <Success class={iconClass} />
-  {:else if type === "warning"}
-    <Warning class={iconClass} />
-  {:else if type === "error"}
-    <ErrorIcon class={iconClass} />
-  {/if}
-  {msg}
+  <div class="inline-flex h-6 w-6">
+    {#if type === "info"}
+      <Info />
+    {:else if type === "success"}
+      <Success />
+    {:else if type === "warning"}
+      <Warning />
+    {:else if type === "error"}
+      <ErrorIcon />
+    {/if}
+  </div>
+  <span class="whitespace-pre-line">
+    {msg}
+  </span>
 </div>
 
 <style lang="postcss">

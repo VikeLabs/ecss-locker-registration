@@ -62,7 +62,7 @@
 </script>
 
 <div>
-  <h1 class="p-2 text-3xl font-semibold">Locker Registration Admin Panel</h1>
+  <h1 class="p-2 text-3xl font-semibold">Locker Admin Panel</h1>
   <hr class="border-black" />
   <div class="p-2">
     {#if Object.values(checked).some((checked) => !checked)}
@@ -75,6 +75,7 @@
         >Delete selected</Button
       >
     {/if}
+    <a href="admin/import"><Button>Import from Excel</Button></a>
   </div>
   <table class="w-full border-collapse border-spacing-0">
     <tr class="bg-neutral-200">
