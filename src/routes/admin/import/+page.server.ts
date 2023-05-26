@@ -5,7 +5,7 @@ import {
 } from "sveltekit-superforms/server";
 import * as XLSX from "xlsx";
 import { z } from "zod";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import { defaultExpiry } from "$lib/date.js";
 import { db } from "$lib/db.js";
 
@@ -13,13 +13,13 @@ const formSchema = z.object({
   sheet: z.undefined(), // Files are ignored by superforms
 });
 
-export async function load({ request }) {
+export async function load() {
   const form = await superValidate(formSchema);
   return { form };
 }
 
 export const actions = {
-  default: async ({ request, fetch }) => {
+  default: async ({ request }) => {
     const formData = await request.formData();
     console.log(formData);
     const form = await superValidate(formData, formSchema);

@@ -7,7 +7,7 @@
   import FileInput from "./FileInput.svelte";
 
   export let data;
-  const { form, delayed, enhance, errors, message } = superForm(data.form);
+  const { delayed, enhance, errors, message } = superForm(data.form);
 
   let files: FileList;
 </script>
