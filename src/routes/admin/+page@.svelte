@@ -76,6 +76,7 @@
       >
     {/if}
     <a href="admin/import"><Button>Import from Excel</Button></a>
+    <a href="admin/export" download><Button>Export to Excel</Button></a>
   </div>
   <table class="w-full border-collapse border-spacing-0">
     <tr class="bg-neutral-200">
