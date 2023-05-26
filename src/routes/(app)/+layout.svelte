@@ -1,9 +1,5 @@
-<script lang="ts">
-  import "../../components.css";
+<script>
+  import Shell from "$lib/components/Shell.svelte";
 </script>
 
-<div
-  class="m-0 box-border flex h-[100svh] w-full flex-col items-center justify-center bg-neutral-100 p-6 font-sans text-neutral-800"
->
-  <slot />
-</div>
+<Shell><slot /></Shell>
