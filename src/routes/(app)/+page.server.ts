@@ -57,7 +57,7 @@ export const actions = {
           ) >= ${MAX_REGISTERED} THEN 'limit-exceeded'
           ELSE 'ok'
         END AS status
-      `.execute(db);
+      `.execute(trx);
       const parsed = z
         .array(
           z.object({

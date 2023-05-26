@@ -9,7 +9,7 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-export async function load({ cookies }) {
+export async function load() {
   const form = await superValidate(formSchema);
   return { form };
 }

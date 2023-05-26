@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "../../components.css";
+  import "$lib/css/components.css";
 </script>
 
 <div
