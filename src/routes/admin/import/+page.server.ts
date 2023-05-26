@@ -21,13 +21,11 @@ export async function load() {
 export const actions = {
   default: async ({ request }) => {
     const formData = await request.formData();
-    console.log(formData);
     const form = await superValidate(formData, formSchema);
     if (!form.valid) {
       return fail(400, { form });
     }
     const sheetFile = formData.get("sheet");
-    console.log(sheetFile);
     if (!sheetFile || !(sheetFile instanceof File) || sheetFile.size === 0) {
       return setError(form, "sheet", "No file uploaded");
     }
@@ -41,11 +39,10 @@ export const actions = {
       .array(
         z.object({
           locker: z.string(),
-          name: z.string(),
-          email: z.string().email(),
+          name: z.string().optional(),
+          email: z.string().email().optional(),
         })
       )
-      .min(1)
       .safeParse(unparsedData);
     if (!parsed.success) {
       return setError(
@@ -56,12 +53,33 @@ export const actions = {
     }
     const { data } = parsed;
 
+    const registrationData = z
+      .array(
+        z.object({
+          locker: z.string(),
+          name: z.string(),
+          email: z.string().email(),
+        })
+      )
+      .safeParse(data);
+    if (!registrationData.success) {
+      return setError(
+        form,
+        "sheet",
+        "If the locker has a name, it must also have an email"
+      );
+    }
+
     const stats = await db.transaction().execute(async (trx) => {
       const user = await trx
         .insertInto("user")
         .ignore()
         .columns(["email"])
-        .values(data.map((row) => ({ email: row.email })))
+        .values(
+          registrationData.data.map((row) => ({
+            email: row.email,
+          }))
+        )
         .executeTakeFirstOrThrow();
 
       const locker = await trx
@@ -76,7 +94,7 @@ export const actions = {
         .ignore()
         .columns(["locker", "user", "name"])
         .values(
-          data.map((row) => ({
+          registrationData.data.map((row) => ({
             locker: row.locker,
             user: row.email,
             name: row.name,
@@ -87,17 +105,21 @@ export const actions = {
       return { user, locker, registration };
     });
 
-    // TODO import stuff
-
     let msg = "";
     if (stats.user.numInsertedOrUpdatedRows ?? 0n !== 0n) {
-      msg += `${stats.user.numInsertedOrUpdatedRows} users added\n`;
+      msg += `${stats.user.numInsertedOrUpdatedRows} user${
+        stats.user.numInsertedOrUpdatedRows === 1n ? "" : "s"
+      } added\n`;
     }
     if (stats.locker.numInsertedOrUpdatedRows ?? 0n !== 0n) {
-      msg += `${stats.locker.numInsertedOrUpdatedRows} lockers added\n`;
+      msg += `${stats.locker.numInsertedOrUpdatedRows} locker${
+        stats.locker.numInsertedOrUpdatedRows === 1n ? "" : "s"
+      } added\n`;
     }
     if (stats.registration.numInsertedOrUpdatedRows ?? 0n !== 0n) {
-      msg += `${stats.registration.numInsertedOrUpdatedRows} lockers registered`;
+      msg += `${stats.registration.numInsertedOrUpdatedRows} locker${
+        stats.registration.numInsertedOrUpdatedRows === 1n ? "" : "s"
+      } registered`;
     }
 
     if (msg === "") {
