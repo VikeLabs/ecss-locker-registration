@@ -3,7 +3,7 @@ import { message, setError, superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 import { fail } from "@sveltejs/kit";
 import { db } from "$lib/db";
-import { sendRegisterEmail } from "$lib/email";
+import { sendRegisterEmail, sendRegisterLimitEmail } from "$lib/email";
 
 const MAX_REGISTERED = 1;
 
@@ -43,32 +43,35 @@ export const actions = {
     const { email, locker, name } = form.data;
 
     const result = await db.transaction().execute(async (trx) => {
-      const { lockerExists } = await trx
-        .selectFrom("locker")
-        .select(db.fn.countAll<string>().as("lockerExists"))
-        .where("id", "=", locker)
-        .executeTakeFirstOrThrow();
-      if (+lockerExists === 0) {
-        return "locker-does-not-exist";
-      }
-      // TODO this could be merged into a subquery with coalesce
-      const { registered } = await trx
-        .selectFrom("registration")
-        .select(db.fn.countAll<string>().as("registered"))
-        .where("user", "=", email)
-        .executeTakeFirstOrThrow();
-      if (+registered + 1 > MAX_REGISTERED) {
-        return "limit-exceeded";
-      }
-      const { lockers } = await trx
-        .selectFrom("registration")
-        .select(db.fn.countAll<string>().as("lockers"))
-        .where("locker", "=", locker)
-        .executeTakeFirstOrThrow();
-      if (+lockers > 0) {
-        return "locker-taken";
-      }
-      return "ok";
+      const result = await sql`
+      SELECT 
+        CASE
+          WHEN NOT EXISTS (
+            SELECT 1 FROM locker WHERE id = ${locker}
+          ) THEN 'locker-does-not-exist'
+          WHEN EXISTS (
+            SELECT 1 FROM registration WHERE locker = ${locker} AND expiry > NOW()
+          ) THEN 'locker-taken'
+          WHEN (
+            SELECT COUNT(*) FROM registration WHERE user = ${email} AND expiry > NOW()
+          ) >= ${MAX_REGISTERED} THEN 'limit-exceeded'
+          ELSE 'ok'
+        END AS status
+      `.execute(db);
+      const parsed = z
+        .array(
+          z.object({
+            status: z.union([
+              z.literal("locker-does-not-exist"),
+              z.literal("locker-taken"),
+              z.literal("limit-exceeded"),
+              z.literal("ok"),
+            ]),
+          })
+        )
+        .min(1)
+        .parse(result.rows);
+      return parsed[0].status;
     });
 
     switch (result) {
@@ -81,11 +84,9 @@ export const actions = {
           "This locker is taken, please register another"
         );
       case "limit-exceeded":
-        // TODO send email telling them they can only register one
-        console.log("TODO send email telling user they can only register one");
+        sendRegisterLimitEmail(email);
         break;
       case "ok":
-        // TODO send verification email
         sendRegisterEmail(email, locker, name);
         break;
     }

@@ -10,14 +10,13 @@ const formSchema = z.object({
 });
 
 export async function load({ cookies }) {
-  await mustAuthorize(cookies); // TODO remove after testing its not needed
   const form = await superValidate(formSchema);
   return { form };
 }
 
 export const actions = {
   default: async ({ params, cookies, request }) => {
-    const { user } = await mustAuthorize(cookies); // TODO remove after testing its not needed
+    const { user } = await mustAuthorize(cookies);
     const locker = params.id;
 
     const form = await superValidate(request, formSchema);

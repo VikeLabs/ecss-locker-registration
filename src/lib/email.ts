@@ -47,6 +47,17 @@ export async function sendRegisterEmail(
   });
 }
 
+export async function sendRegisterLimitEmail(email: string) {
+  const text = `You have reached the maximum number of lockers you can register. Please contact the ESS to request more, or transfer ownership of one of your lockers to another user.
+  .`;
+  await client.sendAsync({
+    from: `Lockers <${env.GMAIL_USER}>`,
+    to: email,
+    subject: `ESS Locker Registration Limit Reached`,
+    text,
+  });
+}
+
 export async function sendLoginEmail(email: string) {
   const token = await makeMagicToken({ type: "login", user: email });
   const text = `Click here to login as ${email}: ${makeMagicLink(token)}`;
@@ -54,6 +65,16 @@ export async function sendLoginEmail(email: string) {
     from: `Lockers <${env.GMAIL_USER}>`,
     to: email,
     subject: `ESS Locker Login`,
+    text,
+  });
+}
+
+export async function sendAccountDoesNotExistEmail(email: string) {
+  const text = `You do not have an account. Please register before trying to log in.`;
+  await client.sendAsync({
+    from: `Lockers <${env.GMAIL_USER}>`,
+    to: email,
+    subject: `ESS Locker Account Does Not Exist`,
     text,
   });
 }
