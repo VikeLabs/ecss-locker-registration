@@ -43,6 +43,8 @@ You may use any of the scripts in the `db` folder to access the database. All of
 
 Note that this project uses SvelteKit's NodeJS adapter. This means that shared singletons like database connections are acceptable for performance reasons, since it won't be running in a serverless environment. However, any state that MUST persist between connections should be put in the database.
 
+If `git push` hangs, you may need to refer to [this solution](https://stackoverflow.com/a/68711337). I'm assuming this occurs because there are large files in the `vendor` directory.
+
 ## Design
 
 This website was designed for maximum usability on mobile devices with unstable or slow internet. Excluding admin functionality, the entire website has a mobile-first layout and works without JavaScript. JavaScript is used to progressively enhance the experience with features such as loading states and a client-side router.
