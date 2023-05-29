@@ -7,7 +7,7 @@ const formSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   locker: z.string(),
-  expiry: z.date(),
+  expiry: z.coerce.date(),
 });
 
 export async function load({ request }) {
@@ -28,7 +28,7 @@ export async function load({ request }) {
   }
   form.data.email = lockerData.user;
   form.data.name = lockerData.name;
-  form.data.expiry = new Date(lockerData.expiry);
+  form.data.expiry = lockerData.expiry;
   return { form };
 }
 
@@ -38,10 +38,15 @@ export const actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
-    const { email, locker, name, expiry } = form.data;
-    if (Number.isNaN(expiry.valueOf())) {
+    const { email, locker, name, expiry: localExpiry } = form.data;
+    if (Number.isNaN(localExpiry.valueOf())) {
       return setError(form, "expiry", "Invalid date");
     }
+
+    // convert local date to UTC
+    const expiry = new Date(
+      localExpiry.valueOf() + localExpiry.getTimezoneOffset() * 60 * 1000
+    );
 
     const result = await db.transaction().execute(async (trx) => {
       await trx

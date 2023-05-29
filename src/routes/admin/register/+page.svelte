@@ -8,7 +8,7 @@
 
   export let data;
   const { form, delayed, enhance, errors, constraints } = superForm(data.form);
-  const expiryDate = dateProxy(form, "expiry", { format: "date" });
+  const expiryDate = dateProxy(form, "expiry", { format: "date-utc" });
 </script>
 
 <Title />
