@@ -37,11 +37,16 @@
       label="Locker Number"
       id="locker"
       name="locker"
+      list="available-lockers"
       bind:value={$form.locker}
       errors={$errors.locker}
       {...$constraints.locker}
-      disabled
     />
+    <datalist id="available-lockers">
+      {#each data.availableLockers as locker}
+        <option value={locker} />
+      {/each}
+    </datalist>
     <Input
       type="date"
       label="Expiry"
