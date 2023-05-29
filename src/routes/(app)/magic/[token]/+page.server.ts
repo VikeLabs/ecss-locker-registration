@@ -12,16 +12,19 @@ export async function load({ params, cookies }) {
   const data = await parseMagicToken(params.token);
   if (data.type === "register") {
     const { user, locker, name } = data;
-    await db
-      .insertInto("registration")
-      .ignore()
-      .values({
-        user,
-        name,
-        locker,
-        expiry: defaultExpiry(),
-      })
-      .executeTakeFirstOrThrow();
+    await db.transaction().execute(async (trx) => {
+      await trx.insertInto("user").ignore().values({ email: user }).execute();
+      await trx
+        .insertInto("registration")
+        .ignore()
+        .values({
+          user,
+          name,
+          locker,
+          expiry: defaultExpiry(),
+        })
+        .executeTakeFirstOrThrow();
+    });
     await login(data, cookies);
     throw redirect(302, `${base}/lockers`);
   } else if (data.type === "login") {
