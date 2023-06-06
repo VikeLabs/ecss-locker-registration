@@ -14,6 +14,14 @@
 
 <Title />
 <main>
+  <div class="text-left">
+    <h2 class="text-lg font-semibold text-neutral-700">Data format</h2>
+    <ul class="ml-5 list-outside list-disc">
+      <li>The only columns are "locker", "name", and "email"</li>
+      <li>If the locker has a name, it must also have an email</li>
+    </ul>
+  </div>
+
   <form method="post" use:enhance>
     {#if $message}
       <Flash {...$message} />

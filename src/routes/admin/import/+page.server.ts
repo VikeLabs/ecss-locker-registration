@@ -38,20 +38,24 @@ export const actions = {
     const parsed = z
       .array(
         z.object({
-          locker: z.string(),
+          locker: z.union([z.string(), z.number()]),
           name: z.string().optional(),
           email: z.string().email().optional(),
         })
       )
       .safeParse(unparsedData);
     if (!parsed.success) {
+      console.log("excel import zod error", parsed.error);
       return setError(
         form,
         "sheet",
         'Expected columns "locker", "name", "email"'
       );
     }
-    const { data } = parsed;
+    const data = parsed.data.map((row) => ({
+      ...row,
+      locker: row.locker.toString(),
+    }));
 
     const registrationData = z
       .array(
@@ -61,7 +65,7 @@ export const actions = {
           email: z.string().email(),
         })
       )
-      .safeParse(data);
+      .safeParse(data.filter((row) => row.name));
     if (!registrationData.success) {
       return setError(
         form,
