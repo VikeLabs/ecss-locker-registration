@@ -55,6 +55,18 @@
         <option value={locker} />
       {/each}
     </datalist>
+    <div class="w-full text-sm font-medium text-neutral-800">
+      <input class="cursor-pointer" type="checkbox" id="agree" required />
+      <label class="cursor-pointer select-none pl-1" for="agree">
+        I have read and agree to the
+        <a
+          class="text-neutral-600 underline"
+          href="https://onlineacademiccommunity.uvic.ca/ess/lockers/"
+        >
+          terms of use
+        </a>
+      </label>
+    </div>
     <Button loading={$delayed}>Register</Button>
   </form>
   <footer>
