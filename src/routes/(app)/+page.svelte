@@ -33,7 +33,7 @@
     />
     <Input
       type="email"
-      label="Email"
+      label="UVic Email"
       id="email"
       name="email"
       bind:value={$form.email}
@@ -57,7 +57,7 @@
     </datalist>
     <div class="w-full text-sm font-medium text-neutral-800">
       <input class="cursor-pointer" type="checkbox" id="agree" required />
-      <label class="cursor-pointer select-none pl-1" for="agree">
+      <label class="cursor-pointer select-none" for="agree">
         I have read and agree to the
         <a
           class="text-neutral-600 underline"

@@ -9,7 +9,15 @@ const MAX_REGISTERED = 1;
 
 const formSchema = z.object({
   name: z.string().nonempty(),
-  email: z.string().email(),
+  email: z
+    .string()
+    .email()
+    .refine((email) => email.endsWith("@uvic.ca"), {
+      message: "Must be a UVic email address",
+    })
+    .refine((email) => !email.includes("+"), {
+      message: "Plus addresses are not allowed",
+    }),
   locker: z.string(),
 });
 
