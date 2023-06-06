@@ -5,3 +5,7 @@ export function defaultExpiry(now: Date = new Date()): Date {
   }
   return new Date(now.getFullYear(), term * 4 + 4, 1);
 }
+
+export function localDateToUTC(local: Date): Date {
+  return new Date(local.valueOf() + local.getTimezoneOffset() * 60 * 1000);
+}

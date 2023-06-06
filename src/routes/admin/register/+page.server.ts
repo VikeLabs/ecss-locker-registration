@@ -1,7 +1,7 @@
 import { setError, superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 import { fail, redirect } from "@sveltejs/kit";
-import { defaultExpiry } from "$lib/date";
+import { defaultExpiry, localDateToUTC } from "$lib/date";
 
 const formSchema = z.object({
   name: z.string(),
@@ -24,9 +24,13 @@ export const actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+    const expiry = localDateToUTC(form.data.expiry);
     const resp = await fetch("/admin/api/lockers", {
       method: "POST",
-      body: JSON.stringify(form.data),
+      body: JSON.stringify({
+        ...form.data,
+        expiry,
+      }),
     });
     const body = await resp.json();
     const { err } = body;

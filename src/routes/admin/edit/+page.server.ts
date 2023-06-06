@@ -3,6 +3,7 @@ import { setError, superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { db } from "$lib/db";
+import { localDateToUTC } from "$lib/date.js";
 
 const formSchema = z.object({
   name: z.string(),
@@ -67,10 +68,7 @@ export const actions = {
     }
 
     // convert local date to UTC
-    const expiry = new Date(
-      localExpiry.valueOf() + localExpiry.getTimezoneOffset() * 60 * 1000
-    );
-
+    const expiry = localDateToUTC(localExpiry);
     const result = await db.transaction().execute(async (trx) => {
       const matchingLocker = await trx
         .selectFrom("locker")
