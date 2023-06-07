@@ -2,8 +2,8 @@ import { sql } from "kysely";
 import { setError, superValidate } from "sveltekit-superforms/server";
 import { z } from "zod";
 import { error, fail, redirect } from "@sveltejs/kit";
-import { db } from "$lib/db";
 import { localDateToUTC } from "$lib/date.js";
+import { db } from "$lib/db";
 
 const formSchema = z.object({
   name: z.string(),
@@ -86,6 +86,22 @@ export const actions = {
         .columns(["email"])
         .values({ email })
         .execute();
+
+      const owner = await trx
+        .selectFrom("registration")
+        .select(["user"])
+        .where("locker", "=", locker)
+        .executeTakeFirst();
+
+      if (owner !== undefined && owner.user == email) {
+        await trx
+          .updateTable("registration")
+          .set({ expiry, name, user: email })
+          .where("locker", "=", locker)
+          .executeTakeFirstOrThrow();
+
+        return "ok";
+      }
 
       const insertResult = await trx
         .insertInto("registration")
