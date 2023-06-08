@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "db:seed": "node db/seed-lockers.js",
-    "db:codegen": "kysely-codegen",
+    "db:codegen": "kysely-codegen --out-file db/db.d.ts",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
