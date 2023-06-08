@@ -18,6 +18,7 @@ CREATE TABLE registration (
     user varchar(255) NOT NULL,
     name varchar(255) NOT NULL,
     expiry datetime NOT NULL,
+    expiryEmailSent datetime DEFAULT NULL,
     PRIMARY KEY (locker),
     INDEX (user) -- references user (email) 
 );
