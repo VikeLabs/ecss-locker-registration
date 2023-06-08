@@ -11,11 +11,7 @@ const client = new SMTPClient({
   password: env.GMAIL_PASSWORD,
 });
 
-let prefix = "";
-// called from src/hooks.server.ts on every request (hopefully)
-export function setOrigin(url: string) {
-  prefix = url;
-}
+let prefix = env.ORIGIN;
 
 function makeLink(path: string) {
   return new URL(path, prefix + base);
